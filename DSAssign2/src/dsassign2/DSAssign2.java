@@ -157,6 +157,35 @@ public class DSAssign2 {
         }
     }
     
+    
+    /**
+     * Adds a table of Administrators to the database
+     */
+    public void addTableFreelancerOffers() {
+
+        String sql = "CREATE TABLE FreelancerOffers(JobID INTEGER, FreelancerID INTEGER, "
+                + "PRIMARY KEY(JobID, FreelancerID), "
+                + "FOREIGN KEY(JobID) REFERENCES JobDescriptions(JobID), "
+                + "FOREIGN KEY(FreelancerID) REFERENCES Freelancers(FreelancerID))";
+        // use try with resource
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+
+            // execute statement 
+            stmt.executeUpdate(sql);
+
+            JOptionPane.showMessageDialog(null, 
+                    "Table Freelancer Offers successfully created");
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            JOptionPane.showMessageDialog(null, "Message: " + sqle.getMessage());
+            JOptionPane.showMessageDialog(null, "Code: " + sqle.getSQLState());
+        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -170,6 +199,7 @@ public class DSAssign2 {
         app.addTableFreelancers();
         app.addTableAdministrators();
         app.addTableJobDescriptions();
+        app.addTableFreelancerOffers();
 
         System.exit(0);
     }
