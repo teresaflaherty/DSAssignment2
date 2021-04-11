@@ -18,6 +18,7 @@ public class DSAssign2 {
     private static final String USER = "app";
     private static final String PASSWD = "app";
 
+    
     /**
      * Adds a table of Users to the database
      */
@@ -25,7 +26,7 @@ public class DSAssign2 {
 
         String sql = "CREATE TABLE Users(UserID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(30), Email VARCHAR(50), Password VARCHAR(30))";
+                + "Name VARCHAR(30), Email VARCHAR(50), Password CHAR(64))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -45,59 +46,6 @@ public class DSAssign2 {
     }
     
     
-//    /**
-//     * Adds a new table of Roles to the database
-//     */
-//    public void addTableRoles() {
-//
-//        String sql = "CREATE TABLE Roles(ID INTEGER PRIMARY KEY "
-//                + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-//                + "Name VARCHAR(60))";
-//        // use try with resource
-//        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
-//                Statement stmt = connect.createStatement();) {
-//
-//            // execute statement 
-//            stmt.executeUpdate(sql);
-//
-//            JOptionPane.showMessageDialog(null, 
-//                    "Table Providers successfully created");
-//
-//            // deal with any potential exceptions
-//            // note: all resources are closed automatically - no need for finally
-//        } catch (SQLException sqle) {
-//            JOptionPane.showMessageDialog(null, "Message: " + sqle.getMessage());
-//            JOptionPane.showMessageDialog(null, "Code: " + sqle.getSQLState());
-//        }
-//    }
-//    
-//    /**
-//     * Adds a new table of User Roles to the database
-//     */
-//    public void addTableUserRoles() {
-//
-//        String sql = "CREATE TABLE Providers(UserID INTEGER FOREIGN KEY REFERENCES Users(UserID), "
-//                + "RoleID INTEGER FOREIGN KEY REFERENCES Roles(RoleID), "
-//                + "PRIMARY KEY(UserID, RoleID)";
-//        // use try with resource
-//        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
-//                Statement stmt = connect.createStatement();) {
-//
-//            // execute statement 
-//            stmt.executeUpdate(sql);
-//
-//            JOptionPane.showMessageDialog(null, 
-//                    "Table Providers successfully created");
-//
-//            // deal with any potential exceptions
-//            // note: all resources are closed automatically - no need for finally
-//        } catch (SQLException sqle) {
-//            JOptionPane.showMessageDialog(null, "Message: " + sqle.getMessage());
-//            JOptionPane.showMessageDialog(null, "Code: " + sqle.getSQLState());
-//        }
-//    }
-    
-    
     /**
      * Adds a table of Providers to the database
      */
@@ -105,7 +53,7 @@ public class DSAssign2 {
 
         String sql = "CREATE TABLE Providers(ProviderID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(60), UserID INTEGER FOREIGN KEY REFERENCES Users(UserID))";
+                + "Name VARCHAR(60), UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -133,7 +81,7 @@ public class DSAssign2 {
         String sql = "CREATE TABLE Freelancers(FreelancerID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
                 + "Name VARCHAR(60), Skills VARCHAR(500), Message VARCHAR(500), "
-                + "Balance INTEGER, UserID INTEGER FOREIGN KEY REFERENCES Users(UserID))";
+                + "Balance INTEGER, UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -142,7 +90,7 @@ public class DSAssign2 {
             stmt.executeUpdate(sql);
 
             JOptionPane.showMessageDialog(null, 
-                    "Table Providers successfully created");
+                    "Table Freelancers successfully created");
 
             // deal with any potential exceptions
             // note: all resources are closed automatically - no need for finally
@@ -160,7 +108,7 @@ public class DSAssign2 {
 
         String sql = "CREATE TABLE Administrators(AdminID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(60), UserID INTEGER FOREIGN KEY REFERENCES Users(UserID))";
+                + "Name VARCHAR(60), UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -169,7 +117,7 @@ public class DSAssign2 {
             stmt.executeUpdate(sql);
 
             JOptionPane.showMessageDialog(null, 
-                    "Table Providers successfully created");
+                    "Table Administators successfully created");
 
             // deal with any potential exceptions
             // note: all resources are closed automatically - no need for finally
@@ -185,12 +133,12 @@ public class DSAssign2 {
      */
     public void addTableJobDescriptions() {
 
-        String sql = "CREATE TABLE JobDescriptions(ID INTEGER PRIMARY KEY "
+        String sql = "CREATE TABLE JobDescriptions(JobID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
                 + "Title VARCHAR(40), Keywords VARCHAR(100), Description VARCHAR(1000), "
-                + "PaymentOffer INTEGER, JobStatus INTEGER"
-                + "ProviderID INTEGER FOREIGN KEY REFERENCES Providers(ProviderID), "
-                + "FreelancerID INTEGER FOREIGN KEY REFERENCES Freelancers(ProviderID))";
+                + "PaymentOffer INTEGER, JobStatus INTEGER, ProviderID INTEGER, "
+                + "FreelancerID INTEGER, FOREIGN KEY(ProviderID) REFERENCES Providers(ProviderID), "
+                + "FOREIGN KEY(FreelancerID) REFERENCES Freelancers(FreelancerID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -199,7 +147,7 @@ public class DSAssign2 {
             stmt.executeUpdate(sql);
 
             JOptionPane.showMessageDialog(null, 
-                    "Table Providers successfully created");
+                    "Table Job Descriptions successfully created");
 
             // deal with any potential exceptions
             // note: all resources are closed automatically - no need for finally
@@ -216,9 +164,12 @@ public class DSAssign2 {
         DSAssign2 app = new DSAssign2();
         JOptionPane.showMessageDialog(null, "Starting Application ...");
 
-        // call addTablePerson
+        // add all tables to the database
         app.addTableUsers();
         app.addTableProviders();
+        app.addTableFreelancers();
+        app.addTableAdministrators();
+        app.addTableJobDescriptions();
 
         System.exit(0);
     }
