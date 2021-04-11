@@ -26,7 +26,7 @@ public class DSAssign2 {
 
         String sql = "CREATE TABLE Users(UserID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(30), Email VARCHAR(50), Password CHAR(64))";
+                + "Name VARCHAR(60), Email VARCHAR(50), Password CHAR(64))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -53,7 +53,7 @@ public class DSAssign2 {
 
         String sql = "CREATE TABLE Providers(ProviderID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(60), UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
+                + "UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -80,8 +80,8 @@ public class DSAssign2 {
 
         String sql = "CREATE TABLE Freelancers(FreelancerID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(60), Skills VARCHAR(500), Message VARCHAR(500), "
-                + "Balance INTEGER, UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
+                + "Skills VARCHAR(500), Message VARCHAR(500), Balance INTEGER, "
+                + "UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -108,7 +108,7 @@ public class DSAssign2 {
 
         String sql = "CREATE TABLE Administrators(AdminID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(60), UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
+                + "UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
