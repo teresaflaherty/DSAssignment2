@@ -10,11 +10,11 @@ import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
 import java.util.ArrayList;
+
 import javax.faces.event.ValueChangeEvent;
 
 @Named(value = "home")
 @RequestScoped
-
 public class home {
 
     private static final String URL = "jdbc:derby://localhost:1527/sample";
@@ -119,12 +119,12 @@ public class home {
         }
         String html_output = "";
         for (job searchedjob : JobsList) {
-            html_output += "<div class=\"col\">\n"
+             html_output += "<div class=\"col\">\n"
                     + "                <div class=\"gig_card\">\n"
                     + "                    <div class=\"gig_card_title\">\n"
                     + "                        " + searchedjob.getTitle() + "\n"
                     + "                    </div>\n"
-                    + "                    <a class=\"view_gig\">View Gig</a>\n"
+                    + "                    <h:commandLink class=\"view_gig\" action='#{home.openGig("+searchedjob.getId()+")}'>View Gig</h:commandLink\n"
                     + "                </div>\n"
                     + "            </div>";
         }
@@ -186,7 +186,7 @@ public class home {
     }
 
 //        RETURNS ALL JOBS, TO BE USED WHEN HOME.HTML IS OPENED
-    public String allJobs() {
+    public ArrayList<job> allJobs() {
         ArrayList<job> JobsList = new ArrayList<>();
         // need two nested try-blocks, as code in finally may throw exception
         try {
@@ -234,20 +234,13 @@ public class home {
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
-        String html_output = "";
-        for (job searchedjob : JobsList) {
-            html_output += "<div class=\"col\">\n"
-                    + "                <div class=\"gig_card\">\n"
-                    + "                    <div class=\"gig_card_title\">\n"
-                    + "                        " + searchedjob.getTitle() + "\n"
-                    + "                    </div>\n"
-                    + "                    <a class=\"view_gig\">View Gig</a>\n"
-                    + "                </div>\n"
-                    + "            </div>";
-        }
+     
         System.out.println(JobsList);
-        return html_output;
+        return JobsList;
     }
+    
+
+ 
 
     public void searchStringChanged(ValueChangeEvent vce) {
         searchjobterm = vce.getNewValue().toString();

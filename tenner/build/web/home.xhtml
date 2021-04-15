@@ -8,112 +8,46 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Tenerr</title>
         <h:outputStylesheet library="css" name="styleshome.css"/>
-         <h:outputScript library="js" name="jquery.js" target="head" />
+        <h:outputScript library="js" name="jquery.js" target="head" />
         <h:outputScript library="js" name="index.js" target="body" />
-       
+
     </h:head>
     <h:body>
 
         <div class="main_search">
-            
+
             <h:form>
                 <h:graphicImage class="logo_icon" library="img" name="tenerr_w.png"/>
                 <h1>Find work that matters.</h1>
                 <p class="sub_heading">But get paid below minimum wage.</p>
                 <h:inputText id="search" a:placeholder="Search for a gig" value="#{home.searchjobterm}"  valueChangeListener="#{home.searchStringChanged}"> <f:ajax execute="search" render="output" event="keyup" /></h:inputText>
-                    
-                
+
+
             </h:form>
-         
+
         </div>
 
         <div class="gig_list_heading" >All Gigs</div>
-        <h:outputText class="flex-grid-thirds all_gigs" id="output" value="#{home.search()}" escape="false"/>
-       <!--- <div class="flex-grid-thirds all_gigs ">
-
-          <  <div class="col">
+        <h:form class="flex-grid-thirds all_gigs">
+        <ui:repeat  var="r" value="#{home.allJobs()}">
+   
+                <div class="col">
                 <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
+                    <div class="gig_card_title">#{r.title}
                     </div>
-                    <a class="view_gig">View Gig</a>
+                    <h:commandLink class="view_gig" action="#{job.openGig()}">View Gig</h:commandLink>
                 </div>
             </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="gig_card">
-                    <div class="gig_card_title">
-                        Build a Node.js socket.io chat app
-                    </div>
-                    <a class="view_gig">View Gig</a>
-                </div>
-            </div>
+           
             
-
-
-
-
-        </div>-->
-
-
+            
+        </ui:repeat>
+        </h:form>
+        <!--<h:outputText class="flex-grid-thirds all_gigs" id="output" value="#{home.search()}" escape="false"/>-->
     </h:body>
 </html>
