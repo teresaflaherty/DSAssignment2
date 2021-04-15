@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-$("#search").keyup( function () {
+$("#search").change( function () {
         $(".gig_list_heading").html("Search results for '"+ $("#search").val() +"' ");
       
    });

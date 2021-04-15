@@ -79,10 +79,10 @@ public class home {
                 stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                if (searchjobterm.isEmpty()) {
+                if (Keywords == null || (Keywords.length()==0 || Keywords.isEmpty())) {
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions");
                 } else {
-                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keywords='" + Keywords + "'");
+                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keywords LIKE '%" + Keywords + "%'");
                 }
                 
                 job job;
@@ -129,7 +129,6 @@ public class home {
                     + "            </div>";
         }
 
-        System.out.println(JobsList);
         return html_output;
     }
 
