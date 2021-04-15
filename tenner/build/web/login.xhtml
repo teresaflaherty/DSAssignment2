@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Tenerr</title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+        <h:outputScript library="js" name="index.js" target="head" />
+    </h:head>
+    <body onload="#{db.run()}">
+        
+        
+      <h:form>
+
+        <h1> Log in </h1>
+        <p class="center_sub">Don't have an account? <h:commandLink action="register">Sign up now</h:commandLink></p>
+        
+        <fieldset>
+
+          <label for="email">Email:</label>
+          <h:inputText id="email" value="#{bean.email}" ></h:inputText>
+       
+          <label for="password">Password:</label>
+          <h:inputSecret id="password" value="#{bean.password}"></h:inputSecret>
+        </fieldset>
+
+        <h:commandButton type="submit" action="#{reg.addjob(bean.name, bean.password,bean.email)}" value="Log in"></h:commandButton>
+        
+       </h:form>
+    
+      
+    </body>
+</html>
+

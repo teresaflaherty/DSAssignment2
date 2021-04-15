@@ -134,3 +134,9 @@ label.light {
             display: inline-block;
             width:24%;
         }
+        
+        .center_sub
+        {
+            text-align: center;
+            margin-top: -20px;
+        }
