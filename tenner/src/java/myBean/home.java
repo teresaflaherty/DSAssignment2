@@ -10,6 +10,7 @@ import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
 import java.util.ArrayList;
+import javax.faces.event.ValueChangeEvent;
 
 @Named(value = "home")
 @RequestScoped
@@ -18,9 +19,18 @@ public class home {
     private static final String URL = "jdbc:derby://localhost:1527/sample";
     private static final String USER = "app";
     private static final String PASSWD = "app";
+    private String searchjobterm;
 
-//    RETURNS ALL JOBS WITH KEYWORD OR ID THAT WAS SEARCHED
-    public ArrayList<job> search(String value){
+    public String getSearchjobterm() {
+        return searchjobterm;
+    }
+
+    public void setSearchjobterm(String searchjobterm) {
+        this.searchjobterm = searchjobterm;
+    }
+
+//    RETURNS ALL JOBS WITH KEYWORDs OR ID THAT WAS SEARCHED
+    public String search(){
         ArrayList<job> JobsList= new ArrayList<>();
                 // need two nested try-blocks, as code in finally may throw exception
         try {
@@ -33,19 +43,19 @@ public class home {
                 try{
                    
                     int id;
-                   id= Integer.parseInt(value);
+                   id= Integer.parseInt(searchjobterm);
                    System.out.println(id);
                    
                    stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE id="+id);
+                result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE jobid="+id);
                 job job;
                 while (result.next()) {
                     // get data out - note: index starts at 1 !!!!
                     job= new job(result.getInt("JobID"),
                             result.getString("title"),
-                            result.getString("keyword"),
+                            result.getString("keywords"),
                             result.getString("description"),
                             result.getInt("paymentoffer"),
                             result.getInt("Jobstatus"),
@@ -57,19 +67,19 @@ public class home {
                 }
             }
                 catch(Exception e){
-                 String Keywords= value; 
+                 String Keywords= searchjobterm; 
                    System.out.println(Keywords);
                    
                  stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keyword='"+Keywords+"'");  
+                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keywords='"+Keywords+"'");  
                 job job;
                 while (result.next()) {
                     // get data out - note: index starts at 1 !!!!
                     job= new job(result.getInt("JobID"),
                             result.getString("title"),
-                            result.getString("keyword"),
+                            result.getString("keywords"),
                             result.getString("description"),
                             result.getInt("paymentoffer"),
                             result.getInt("Jobstatus"),
@@ -99,7 +109,20 @@ public class home {
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
-        return JobsList;
+        String html_output = "";
+        for(job searchedjob : JobsList)
+        {
+            html_output += "<div class=\"col\">\n" +
+"                <div class=\"gig_card\">\n" +
+"                    <div class=\"gig_card_title\">\n" +
+"                        " + searchedjob.getTitle()+"\n" +
+"                    </div>\n" +
+"                    <a class=\"view_gig\">View Gig</a>\n" +
+"                </div>\n" +
+"            </div>";
+        }
+        System.out.println(JobsList);
+        return html_output;
     }
     
     
@@ -185,7 +208,7 @@ public class home {
                     // get data out - note: index starts at 1 !!!!
                     job= new job(result.getInt("JobID"),
                             result.getString("title"),
-                            result.getString("keyword"),
+                            result.getString("keywords"),
                             result.getString("description"),
                             result.getInt("paymentoffer"),
                             result.getInt("Jobstatus"),
@@ -210,10 +233,15 @@ public class home {
            System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
+        
         return JobsList;
     }
     
-    
+    public void searchStringChanged(ValueChangeEvent vce)
+{
+    searchjobterm = vce.getNewValue().toString();
+    search();
+}
    
 }    
             
