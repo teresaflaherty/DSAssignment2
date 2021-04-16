@@ -15,7 +15,7 @@
 
         <h1> Sign Up </h1>
         
-        <fieldset>
+        
           
           <legend><span class="number">1</span> Your Basic Info</legend>
         
@@ -36,7 +36,7 @@
           </div>
         
           
-        </fieldset>
+        
         <fieldset>  
         
           <legend><span class="number">2</span> Your Profile</legend>
@@ -59,7 +59,7 @@
          </fieldset>
        
    
-        <h:commandButton type="submit" action="#{reg.addjob(bean.name, bean.password,bean.email)}" value="Sign Up"></h:commandButton>
+        <h:commandButton type="submit" action="#{reg.register(bean.name, bean.password,bean.email)}" value="Sign Up"></h:commandButton>
         
        </h:form>
     

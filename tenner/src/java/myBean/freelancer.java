@@ -4,26 +4,29 @@
  * and open the template in the editor.
  */
 package myBean;
+
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
 
-@Named(value = "reg")
+@Named(value = "provider")
 @RequestScoped
 
-public class reg {
+/**
+ *
+ * @author my pc
+ */
+public class freelancer {
     
     private static final String URL = "jdbc:derby://localhost:1527/sample";
     private static final String USER = "app";
-    private static final String PASSWD = "app";
-    private String name;
-    private String password;
-    private String email;
+    private static final String PASSWD = "app"; 
     
-    public void register(String name, String password,String email){
+    public void jobstatus(int Jobid, int jobstatus){
         
-              try {
+        // TODO add your handling code here:
+                try {
             Connection connect = null;
             Statement stmt = null;
             ResultSet result;
@@ -32,23 +35,28 @@ public class reg {
                 // connect to db - make sure derbyclient.jar is added to your project
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
                 
+//                int id;
+//                id= Integer.parseInt(Jobid);
+//                
                  //Prepare a query to insert values into Athlete Coaches table
-                String query = "INSERT INTO Users (Name,Email,Password) VALUES(?,?,?)";
+                String query = "UPDATE JOBDescriptions SET JOBSTATUS=? where id="+Jobid;
 
                 //Connect to the database with queries
                 PreparedStatement pst = connect.prepareStatement(query);
                 
-                //Get text entered into textfields
-                //put them into the corresponding queries
-                pst.setString(1,name);
-                pst.setString(2,password);
-                pst.setString(3,email);
+                  pst.setString(1,"JOBSTATUS"+ jobstatus); 
+                
+                //execute the queries
+                pst.executeUpdate();
+                
 
                 
                 //execute the queries
                 pst.executeUpdate();
-             
-                                       
+                
+                                //Get text entered into textfields
+                //put them into the corresponding queries
+     
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -62,7 +70,7 @@ public class reg {
             // note: all resources are closed automatically - no need for finally
         } catch (SQLException sql) {
             //sql.printStackTrace();
-             System.out.println(sql.getMessage());
+            System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
 

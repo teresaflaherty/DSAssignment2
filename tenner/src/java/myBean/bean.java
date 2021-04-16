@@ -21,9 +21,24 @@ public class bean {
      */
     private String name;
     private String password;
-    private String email;  
+    private String email; 
+    private String bio;
+    private String skills;
+    private String type; //freelancer or provider
     
     
+    
+    public String getType(){
+    return type;
+    }
+    
+    public String getSkills() {
+        return skills;
+    }
+  
+    public String geBio() {
+        return bio;
+    }
     
     public String getName() {
         return name;
