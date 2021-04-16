@@ -23,7 +23,7 @@ public class reg {
     private static final String PASSWD = "app";
     
     
-    public void register(String name, String password,String email, String type, ArrayList<String> skills, String bio){
+    public String register(String name, String password,String email, String type, ArrayList<String> skills, String bio){
         
         try {
             try{
@@ -36,7 +36,6 @@ public class reg {
             Connection connect = null;
             Statement stmt = null;
             ResultSet result;
-            String data = "Results:\n";
             try {
                 // connect to db - make sure derbyclient.jar is added to your project
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -57,6 +56,7 @@ public class reg {
                 //execute the queries
                 pst.executeUpdate();
                 
+                //stores UserID to insert into Provider/Freelancer table
                 stmt = connect.createStatement();
                 result = stmt.executeQuery("SELECT MAX(UserID) FROM Users");
                 int userID = 1000;
@@ -78,37 +78,38 @@ public class reg {
 
                     //execute the queries
                     pst.executeUpdate();
-              }
-              else if(type.equals("Freelancer")) {
+                }
+                else if(type.equals("Freelancer")) {
 
-                  String skills_string = String.join(",", skills);
-                   //Prepare a query to insert values into Users table
-                  query = "INSERT INTO Freelancers (Skills, Message, Balance, UserID) VALUES(?, ?, ?, ?)";
+                    String skills_string = String.join(",", skills);
+                     //Prepare a query to insert values into Users table
+                    query = "INSERT INTO Freelancers (Skills, Message, Balance, UserID) VALUES(?, ?, ?, ?)";
 
-                  //Connect to the database with queries
-                  pst = connect.prepareStatement(query);
+                    //Connect to the database with queries
+                    pst = connect.prepareStatement(query);
 
-                  //Get text entered into textfields
-                  //put them into the corresponding queries
-                  pst.setString(1, skills_string);
-                  pst.setString(2, bio);
-                  pst.setInt(3, 0);
-                  pst.setInt(4, userID);
-
-
-                  //execute the queries
-                  pst.executeUpdate();
-              }
+                    //Get text entered into textfields
+                    //put them into the corresponding queries
+                    pst.setString(1, skills_string);
+                    pst.setString(2, bio);
+                    pst.setInt(3, 0);
+                    pst.setInt(4, userID);
 
 
-          } finally {
-              if (stmt != null) {
-                  stmt.close();
-              }
-              if (connect != null) {
-                  connect.close();
-              }
-          }
+                    //execute the queries
+                    pst.executeUpdate();
+                }
+            
+                return "home";
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
 
         // deal with any potential exceptions
         // note: all resources are closed automatically - no need for finally
@@ -116,7 +117,67 @@ public class reg {
             //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
+            return null;
         }
+    }
+    
+    
+    public String login(String email, String password_entry) {
+        
+        try {
+            String entry_hashed = "";
+            try{
+                entry_hashed = hash_password(password_entry);
+            }
+            catch(NoSuchAlgorithmException e) {
+                System.out.println(e.getMessage());
+            }
+
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                // connect to db - make sure derbyclient.jar is added to your project
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                
+                String query = "SELECT * FROM Users WHERE Email = ?";
+
+                //Connect to the database with queries
+                PreparedStatement pst = connect.prepareStatement(query);
+
+                //Get text entered into textfields
+                //put them into the corresponding queries
+                pst.setString(1, email);
+
+                //execute the queries
+                result = pst.executeQuery();
+                
+                String password = "";
+                while (result.next()) {
+                    password = result.getString("password");
+                }
+                
+                if (entry_hashed.equals(password)) {
+                    return "home";
+                }
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+            
+        // deal with any potential exceptions
+        // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        
+        return null;
     }
     
     

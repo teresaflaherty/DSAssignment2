@@ -28,7 +28,7 @@ public class db {
 
         String sql = "CREATE TABLE Users(UserID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "Name VARCHAR(60), Email VARCHAR(50), Password CHAR(64))";
+                + "Name VARCHAR(60), Email VARCHAR(100), Password CHAR(64))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) 
