@@ -10,7 +10,7 @@ import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
 
-@Named(value = "provider")
+@Named(value = "freelancer")
 @RequestScoped
 
 /**
