@@ -5,16 +5,23 @@
  */
 package myBean;
 
+import javax.inject.Named;
+import javax.enterprise.context.RequestScoped;
+
 /**
  *
  * @author my pc
  */
-public class Job {
-    String title,keywords,description;
-    int id,payment,jobstatus,providerId,freelancerId;
-    
+@Named(value = "job")
+@RequestScoped
+public class job {
+    private String title,keywords,description;
+    private int id,payment,jobstatus,providerId,freelancerId;
+   
+//    BEANS MUST HAVE AN EMPTY CONSTRUCTOR WITH NO PARAMETERS
+
  
-    public Job(int id,String title,String keywords,String description,int payment,int jobstatus,int providerId, int freelancerId){
+    public job(int id,String title,String keywords,String description,int payment,int jobstatus,int providerId, int freelancerId){
         this.title=title;
         this.keywords=keywords;
         this.description=description;
@@ -25,6 +32,9 @@ public class Job {
         this.freelancerId=freelancerId;
     }
 
+        public job(){
+        
+    }
     public String getDescription() {
         return description;
     }
@@ -98,7 +108,6 @@ public class Job {
     
    public int getFreelancerId(){
         return freelancerId;
-    }
-
+    }  
     
 }

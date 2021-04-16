@@ -32,7 +32,7 @@ public class home {
 
 //    RETURNS ALL JOBS WITH KEYWORDs OR ID THAT WAS SEARCHED
     public String search() {
-        ArrayList<Job> JobsList = new ArrayList<>();
+        ArrayList<job> JobsList = new ArrayList<>();
         // need two nested try-blocks, as code in finally may throw exception
 
         try {
@@ -57,17 +57,28 @@ public class home {
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE jobid=" + id);
                 }
                 
-                Job job;
+                job job;
                 while (result.next()) {
+                    
+                    job= new job();
+                    job.setId(result.getInt("JobID"));
+                    job.setTitle(result.getString("title"));
+                    job.setKeywords(result.getString("keywords"));
+                    job.setDescription(result.getString("description"));
+                    job.setPayment(result.getInt("paymentoffer"));
+                    job.setJobstatus(result.getInt("Jobstatus"));
+                    job.setProviderId(result.getInt("providerId"));
+                    job.setFreelancerId(result.getInt("freelancerId"));
+                    
                     // get data out - note: index starts at 1 !!!!
-                    job = new Job(result.getInt("JobID"),
-                            result.getString("title"),
-                            result.getString("keywords"),
-                            result.getString("description"),
-                            result.getInt("paymentoffer"),
-                            result.getInt("Jobstatus"),
-                            result.getInt("providerId"),
-                            result.getInt("freelancerId"));
+//                    job = new job(result.getInt("JobID"),
+//                            result.getString("title"),
+//                            result.getString("keywords"),
+//                            result.getString("description"),
+//                            result.getInt("paymentoffer"),
+//                            result.getInt("Jobstatus"),
+//                            result.getInt("providerId"),
+//                            result.getInt("freelancerId"));
 
                     //Add values to list
                     JobsList.add(job);
@@ -85,17 +96,31 @@ public class home {
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keywords LIKE '%" + Keywords + "%'");
                 }
                 
-                Job job;
+                job job;
                 while (result.next()) {
+                    job= new job();
+                    job.setId(result.getInt("JobID"));
+                    job.setTitle(result.getString("title"));
+                    job.setKeywords(result.getString("keywords"));
+                    job.setDescription(result.getString("description"));
+                    job.setPayment(result.getInt("paymentoffer"));
+                    job.setJobstatus(result.getInt("Jobstatus"));
+                    job.setProviderId(result.getInt("providerId"));
+                    job.setFreelancerId(result.getInt("freelancerId"));
+                    
+                    
+                    
+                    
+                    
                     // get data out - note: index starts at 1 !!!!
-                    job = new Job(result.getInt("JobID"),
-                            result.getString("title"),
-                            result.getString("keywords"),
-                            result.getString("description"),
-                            result.getInt("paymentoffer"),
-                            result.getInt("Jobstatus"),
-                            result.getInt("providerId"),
-                            result.getInt("freelancerId"));
+//                    job = new job(result.getInt("JobID"),
+//                            result.getString("title"),
+//                            result.getString("keywords"),
+//                            result.getString("description"),
+//                            result.getInt("paymentoffer"),
+//                            result.getInt("Jobstatus"),
+//                            result.getInt("providerId"),
+//                            result.getInt("freelancerId"));
 
                     //Add values to list
                     JobsList.add(job);
@@ -118,7 +143,7 @@ public class home {
             System.out.println(sql.getSQLState());
         }
         String html_output = "";
-        for (Job searchedjob : JobsList) {
+        for (job searchedjob : JobsList) {
              html_output += "<div class=\"col\">\n"
                     + "                <div class=\"gig_card\">\n"
                     + "                    <div class=\"gig_card_title\">\n"
@@ -133,8 +158,8 @@ public class home {
     }
 
 //    RETURNS THE JOB DESCRIPTION OF A SELECTED GIG OR JOB WHEN PERSON CLICKS VIEW
-    public ArrayList<Job> getJobDescription(int jobid) {
-        ArrayList<Job> JobsList = new ArrayList<>();
+    public ArrayList<job> getJobDescription(int jobid) {
+        ArrayList<job> JobsList = new ArrayList<>();
 
         try {
             Connection connect = null;
@@ -150,17 +175,28 @@ public class home {
                 // on calling executeQuery
                 result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE Jobid=" + jobid);
 
-                Job job;
+                job job;
                 while (result.next()) {
-                    // get data out - note: index starts at 1 !!!!
-                    job = new Job(result.getInt("JobID"),
-                            result.getString("title"),
-                            result.getString("keyword"),
-                            result.getString("description"),
-                            result.getInt("paymentoffer"),
-                            result.getInt("Jobstatus"),
-                            result.getInt("providerId"),
-                            result.getInt("freelancerId"));
+                    
+                    job= new job();
+                    job.setId(result.getInt("JobID"));
+                    job.setTitle(result.getString("title"));
+                    job.setKeywords(result.getString("keywords"));
+                    job.setDescription(result.getString("description"));
+                    job.setPayment(result.getInt("paymentoffer"));
+                    job.setJobstatus(result.getInt("Jobstatus"));
+                    job.setProviderId(result.getInt("providerId"));
+                    job.setFreelancerId(result.getInt("freelancerId"));
+                    
+//                    // get data out - note: index starts at 1 !!!!
+//                    job = new job(result.getInt("JobID"),
+//                            result.getString("title"),
+//                            result.getString("keyword"),
+//                            result.getString("description"),
+//                            result.getInt("paymentoffer"),
+//                            result.getInt("Jobstatus"),
+//                            result.getInt("providerId"),
+//                            result.getInt("freelancerId"));
 
                     //Add values to list
                     JobsList.add(job);
@@ -186,8 +222,8 @@ public class home {
     }
 
 //        RETURNS ALL JOBS, TO BE USED WHEN HOME.HTML IS OPENED
-    public ArrayList<Job> allJobs() {
-        ArrayList<Job> JobsList = new ArrayList<>();
+    public ArrayList<job> allJobs() {
+        ArrayList<job> JobsList = new ArrayList<>();
         // need two nested try-blocks, as code in finally may throw exception
         try {
             Connection connect = null;
@@ -204,17 +240,28 @@ public class home {
                 result = stmt.executeQuery("SELECT * FROM JOBDescriptions");
                 // process results
                 // while there are results
-                Job job;
+                job job;
                 while (result.next()) {
+                    
+                    job= new job();
+                    job.setId(result.getInt("JobID"));
+                    job.setTitle(result.getString("title"));
+                    job.setKeywords(result.getString("keywords"));
+                    job.setDescription(result.getString("description"));
+                    job.setPayment(result.getInt("paymentoffer"));
+                    job.setJobstatus(result.getInt("Jobstatus"));
+                    job.setProviderId(result.getInt("providerId"));
+                    job.setFreelancerId(result.getInt("freelancerId"));
+                    
                     // get data out - note: index starts at 1 !!!!
-                    job = new Job(result.getInt("JobID"),
-                            result.getString("title"),
-                            result.getString("keywords"),
-                            result.getString("description"),
-                            result.getInt("paymentoffer"),
-                            result.getInt("Jobstatus"),
-                            result.getInt("providerId"),
-                            result.getInt("freelancerId"));
+//                    job = new job(result.getInt("JobID"),
+//                            result.getString("title"),
+//                            result.getString("keywords"),
+//                            result.getString("description"),
+//                            result.getInt("paymentoffer"),
+//                            result.getInt("Jobstatus"),
+//                            result.getInt("providerId"),
+//                            result.getInt("freelancerId"));
                     //Add values to list
                     JobsList.add(job);
                 }
