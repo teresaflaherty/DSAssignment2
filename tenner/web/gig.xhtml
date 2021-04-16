@@ -3,11 +3,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Gig Overview</title>
+        <h:outputStylesheet library="css" name="stylesgig.css"/>
+        <h:outputScript library="js" name="jquery.js" target="head" />
     </h:head>
-    <h:body>
+    <h:body><h:graphicImage id="logo_icon" library="img" name="logo.jpg"/>
+     
         
-        #{home.getJobDescription(job.id)}
+        <!--#{home.getJobDescription(job.id)}-->
+        <h:form>
+            <h1>Job Title to go here</h1>
+            <p>Job ID: 123456</p>
+            <p>Keywords: one, two, three</p>
+            <br></br>
+            <p class="job_desc">This is the job description. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h3>Expected Pay: €999</h3>
+            <h:commandLink class="apply_for_job">Apply for Job</h:commandLink><h:commandLink class="back_to_job_list" action="home">Back to job list</h:commandLink>
+        </h:form>
     </h:body>
 </html>
 
