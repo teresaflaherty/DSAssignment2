@@ -1,28 +1,20 @@
-package myBean;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package myBean;
 
 /**
  *
  * @author my pc
  */
-
-@Named(value = "job")
-@RequestScoped
-
-public class job {
+public class Job {
     String title,keywords,description;
     int id,payment,jobstatus,providerId,freelancerId;
     
  
-    public job(int id,String title,String keywords,String description,int payment,int jobstatus,int providerId, int freelancerId){
+    public Job(int id,String title,String keywords,String description,int payment,int jobstatus,int providerId, int freelancerId){
         this.title=title;
         this.keywords=keywords;
         this.description=description;
@@ -75,6 +67,7 @@ public class job {
         return providerId;
     }
 
+    //    //Setters
     public void setTitle(String title) {
         this.title = title;
     }
@@ -106,24 +99,6 @@ public class job {
    public int getFreelancerId(){
         return freelancerId;
     }
-//    //Setters
-//    public void setTitle(String title){
-//        this.title=title;
-//    }
-//    public void setKeywords(String keywords){
-//         this.keywords=keywords;
-//    }
-//    
-//    public void setDescript(String descript){
-//        this.descript=descript;
-//    }
-//    public void setId(int id){
-//        this.id=id;
-//    }
-//    
-//    public void setPayment(double payment){
-//       this.payment=payment;
-//    }
+
     
 }
-

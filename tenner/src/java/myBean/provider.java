@@ -19,8 +19,8 @@ public class provider {
     private static final String PASSWD = "app";
     
     
-    //This removes a job posting, the string JOBID can be changed for an int
-    // Just delete the int id on line 36-37
+    //This removes a job posting, the int JOBID can be changed for an String
+    // Just uncomment the int id on line 36-37
         public void remove_job(int Jobid){
         
         // TODO add your handling code here:

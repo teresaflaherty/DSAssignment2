@@ -32,7 +32,7 @@ public class home {
 
 //    RETURNS ALL JOBS WITH KEYWORDs OR ID THAT WAS SEARCHED
     public String search() {
-        ArrayList<job> JobsList = new ArrayList<>();
+        ArrayList<Job> JobsList = new ArrayList<>();
         // need two nested try-blocks, as code in finally may throw exception
 
         try {
@@ -57,10 +57,10 @@ public class home {
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE jobid=" + id);
                 }
                 
-                job job;
+                Job job;
                 while (result.next()) {
                     // get data out - note: index starts at 1 !!!!
-                    job = new job(result.getInt("JobID"),
+                    job = new Job(result.getInt("JobID"),
                             result.getString("title"),
                             result.getString("keywords"),
                             result.getString("description"),
@@ -85,10 +85,10 @@ public class home {
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keywords LIKE '%" + Keywords + "%'");
                 }
                 
-                job job;
+                Job job;
                 while (result.next()) {
                     // get data out - note: index starts at 1 !!!!
-                    job = new job(result.getInt("JobID"),
+                    job = new Job(result.getInt("JobID"),
                             result.getString("title"),
                             result.getString("keywords"),
                             result.getString("description"),
@@ -118,7 +118,7 @@ public class home {
             System.out.println(sql.getSQLState());
         }
         String html_output = "";
-        for (job searchedjob : JobsList) {
+        for (Job searchedjob : JobsList) {
              html_output += "<div class=\"col\">\n"
                     + "                <div class=\"gig_card\">\n"
                     + "                    <div class=\"gig_card_title\">\n"
@@ -133,8 +133,8 @@ public class home {
     }
 
 //    RETURNS THE JOB DESCRIPTION OF A SELECTED GIG OR JOB WHEN PERSON CLICKS VIEW
-    public ArrayList<job> getJobDescription(int jobid) {
-        ArrayList<job> JobsList = new ArrayList<>();
+    public ArrayList<Job> getJobDescription(int jobid) {
+        ArrayList<Job> JobsList = new ArrayList<>();
 
         try {
             Connection connect = null;
@@ -150,10 +150,10 @@ public class home {
                 // on calling executeQuery
                 result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE Jobid=" + jobid);
 
-                job job;
+                Job job;
                 while (result.next()) {
                     // get data out - note: index starts at 1 !!!!
-                    job = new job(result.getInt("JobID"),
+                    job = new Job(result.getInt("JobID"),
                             result.getString("title"),
                             result.getString("keyword"),
                             result.getString("description"),
@@ -186,8 +186,8 @@ public class home {
     }
 
 //        RETURNS ALL JOBS, TO BE USED WHEN HOME.HTML IS OPENED
-    public ArrayList<job> allJobs() {
-        ArrayList<job> JobsList = new ArrayList<>();
+    public ArrayList<Job> allJobs() {
+        ArrayList<Job> JobsList = new ArrayList<>();
         // need two nested try-blocks, as code in finally may throw exception
         try {
             Connection connect = null;
@@ -204,10 +204,10 @@ public class home {
                 result = stmt.executeQuery("SELECT * FROM JOBDescriptions");
                 // process results
                 // while there are results
-                job job;
+                Job job;
                 while (result.next()) {
                     // get data out - note: index starts at 1 !!!!
-                    job = new job(result.getInt("JobID"),
+                    job = new Job(result.getInt("JobID"),
                             result.getString("title"),
                             result.getString("keywords"),
                             result.getString("description"),

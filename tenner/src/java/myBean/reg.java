@@ -20,6 +20,8 @@ public class reg {
     private String name;
     private String password;
     private String email;
+    private String bio;
+    
     
     public void register(String name, String password,String email){
         
