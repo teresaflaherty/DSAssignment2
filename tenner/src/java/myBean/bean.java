@@ -5,6 +5,7 @@
  */
 package myBean;
 
+import java.util.List;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
@@ -23,7 +24,7 @@ public class bean {
     private String password;
     private String email; 
     private String bio;
-    private String skills;
+    private List<String> skills;
     private String type; //freelancer or provider
     
     
@@ -32,18 +33,35 @@ public class bean {
     return type;
     }
     
-    public String getSkills() {
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    public List<String> getSkills() {
         return skills;
     }
+    
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
   
-    public String geBio() {
+    public String getBio() {
         return bio;
+    }
+    
+    public void setBio(String bio) {
+        this.bio = bio;
     }
     
     public String getName() {
         return name;
     }
-    public String getemail() {
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getEmail() {
         return email;
     }
     
@@ -58,11 +76,6 @@ public class bean {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
   
     public bean() {
     }

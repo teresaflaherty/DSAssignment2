@@ -29,9 +29,9 @@
           <h:inputSecret id="password" value="#{bean.password}"></h:inputSecret>
           <div class="fullwch">
           <label>Are you a freelancer or employer?:</label>
-        <h:selectOneRadio>
+        <h:selectOneRadio value="#{bean.type}">
    	<f:selectItem itemValue="Freelancer" itemLabel="Freelancer" />
-   	<f:selectItem itemValue="Employer" itemLabel="Employer" />
+   	<f:selectItem itemValue="Provider" itemLabel="Provider" />
         </h:selectOneRadio>
           </div>
         
@@ -42,12 +42,12 @@
           <legend><span class="number">2</span> Your Profile</legend>
           
          <label for="bio">Bio:</label>
-          <h:inputTextarea id="bio" ></h:inputTextarea>
+          <h:inputTextarea id="bio" value="#{bean.bio}"></h:inputTextarea>
         
           <div class="fullwch skill">
           <label>Skills:</label>
           
-          <h:selectManyCheckbox>
+          <h:selectManyCheckbox value="#{bean.skills}">
    	<f:selectItem itemValue="skill_nodejs" itemLabel="Node.JS" />
    	<f:selectItem itemValue="skill_php" itemLabel="PHP" />
         
@@ -59,7 +59,7 @@
          </fieldset>
        
    
-        <h:commandButton type="submit" action="#{reg.register(bean.name, bean.password,bean.email)}" value="Sign Up"></h:commandButton>
+        <h:commandButton type="submit" action="#{reg.register(bean.name, bean.password,bean.email, bean.type, bean.skills, bean.bio)}" value="Sign Up"></h:commandButton>
         
        </h:form>
     
