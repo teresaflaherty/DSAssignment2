@@ -6,15 +6,17 @@
 package myBean;
 
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
 
 /**
  *
  * @author my pc
  */
 @Named(value = "job")
-@RequestScoped
-public class job {
+@SessionScoped
+public class job implements Serializable {
+
     private String title,keywords,description;
     private int id,payment,jobstatus,providerId,freelancerId;
    
@@ -109,5 +111,5 @@ public class job {
    public int getFreelancerId(){
         return freelancerId;
     }  
-    
+   
 }
