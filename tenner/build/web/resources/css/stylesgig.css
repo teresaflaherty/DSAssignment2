@@ -191,14 +191,21 @@ label.light {
             background: #3e693f;
             color: white;
         }
-        .flex-grid-thirds {
+        .flex-grid-halfs {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
 }
-.flex-grid-thirds .col {
-  width: 32%;
+.flex-grid-halfs .col {
+  width: 48%;
       margin-bottom: 22px;
+          margin: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    resize: vertical;
+   
 }
 .apply_for_job
 {
@@ -219,3 +226,10 @@ label.light {
             color:#5ea060;
             margin-left: 20px;
         }
+        .animated
+        {
+            width: 30%;
+            position: absolute;
+            right: 25%;
+        }
+        

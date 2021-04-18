@@ -8,11 +8,10 @@
         <h:outputStylesheet library="css" name="stylesgig.css"/>
         <h:outputScript library="js" name="jquery.js" target="head" />
     </h:head>
-    <h:body><h:graphicImage id="logo_icon" library="img" name="logo.jpg"/>
+    <h:body ><h:graphicImage id="logo_icon" library="img" name="logo.jpg"/>
      
-        
-        <!--#{home.getJobDescription(job.id)}-->
-        <h:form>
+        <div class="flex-grid-halfs">
+        <div class="col"><h:form>
              <ui:repeat var="gig" value="#{home.getJobDescription(job.id)}">
                <h1>#{gig.title}</h1>
                 <p>Job ID: #{gig.id}</p>
@@ -21,8 +20,11 @@
                 <h3>Expected Pay: €#{gig.payment}</h3> 
             </ui:repeat>
 
-            <h:commandLink class="apply_for_job">Apply for Job</h:commandLink><h:commandLink class="back_to_job_list" action="home">Back to job list</h:commandLink>
-        </h:form>
+            <h:commandLink class="apply_for_job" action="applicationcomplete">Apply for Job</h:commandLink><h:commandLink class="back_to_job_list" action="home">Back to job list</h:commandLink>
+        </h:form></div>
+        <div class="col"><h:graphicImage class="animated" library="img" name="Coding.gif"/></div>
+        </div>
+        
     </h:body>
 </html>
 

@@ -66,7 +66,11 @@ select {
   height: 32px;
   border-radius: 2px;
 }
-
+.my-account{
+    position: absolute;
+    height: 50px;
+    width: 100%;
+}
 button {
   padding: 19px 39px 18px 39px;
   color: #FFF;
@@ -194,4 +198,11 @@ label.light {
 .flex-grid-thirds .col {
   width: 32%;
       margin-bottom: 22px;
+}
+
+.gotoaccount{
+    color: white;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
