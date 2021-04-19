@@ -98,11 +98,7 @@ public class home {
                     job.setJobstatus(result.getInt("Jobstatus"));
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
-                    
-                    
-                    
-                    
-
+ 
                     //Add values to list
                     JobsList.add(job);
                 }
@@ -123,17 +119,6 @@ public class home {
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
-//        String html_output = "";
-//        for (job searchedjob : JobsList) {
-//             html_output += "<div class=\"col\">\n"
-//                    + "                <div class=\"gig_card\">\n"
-//                    + "                    <div class=\"gig_card_title\">\n"
-//                    + "                        " + searchedjob.getTitle() + "\n"
-//                    + "                    </div>\n"
-//                    + "                    <h:commandLink class=\"view_gig\" action='#{home.openGig("+searchedjob.getId()+")}'>View Gig</h:commandLink\n"
-//                    + "                </div>\n"
-//                    + "            </div>";
-//        }
         
         return JobsList;
     }
