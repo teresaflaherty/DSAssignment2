@@ -5,23 +5,41 @@
  */
 package myBean;
 
+import java.io.Serializable;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
 import java.util.ArrayList;
+import javax.enterprise.context.SessionScoped;
 
-import javax.faces.event.ValueChangeEvent;
 
 @Named(value = "home")
-@RequestScoped
-public class home {
+@SessionScoped
+public class home implements Serializable{
 
     private static final String URL = "jdbc:derby://localhost:1527/sample";
     private static final String USER = "app";
-    private static final String PASSWD = "app";
-    private String searchjobterm;
 
+   
+    private static final String PASSWD = "app";
+    private String searchjobterm ;
+    private String searchtitle= "All Gigs";
+
+     public String getSearchtitle(String in) {
+         if( in == null || in.isEmpty())
+         {
+             searchtitle = "All Gigs";
+         }
+         else
+         {
+             searchtitle = "Search results for \""+ in +"\" "; 
+         }
+        return searchtitle;
+    }
+
+    public void setSearchtitle(String searchtitle) {
+        this.searchtitle = searchtitle;
+    }
     public String getSearchjobterm() {
         return searchjobterm;
     }
@@ -32,8 +50,11 @@ public class home {
 
 //    RETURNS ALL JOBS WITH KEYWORDs OR ID THAT WAS SEARCHED
     public ArrayList<job> search() {
+        
         ArrayList<job> JobsList = new ArrayList<>();
         // need two nested try-blocks, as code in finally may throw exception
+        
+        
 
         try {
             Connection connect = null;
@@ -51,11 +72,10 @@ public class home {
                 stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                if (searchjobterm.isEmpty()) {
-                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions");
-                } else {
+               
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE jobid=" + id);
-                }
+                    
+            
                 
                 job job;
                 while (result.next()) {
@@ -81,11 +101,11 @@ public class home {
                 stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                if (Keywords == null || (Keywords.length()==0 || Keywords.isEmpty())) {
-                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions");
-                } else {
+               
+              
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keywords LIKE '%" + Keywords + "%'");
-                }
+                    
+               
                 
                 job job;
                 while (result.next()) {
@@ -185,6 +205,7 @@ public class home {
          
         ArrayList<job> JobsList = new ArrayList<>();
         if(searched==null){
+            searchtitle = "All Gigs";
         // need two nested try-blocks, as code in finally may throw exception
         try {
             Connection connect = null;
@@ -238,20 +259,12 @@ public class home {
         System.out.println(JobsList);
                }
          else{
-             
+            
              JobsList=search();
+             
          }
         return JobsList;
     }
-    
-
- 
-
-    public void searchStringChanged(ValueChangeEvent vce) {
-        searchjobterm = vce.getNewValue().toString();
-        allJobs();
-    }
-    
     
 
 
