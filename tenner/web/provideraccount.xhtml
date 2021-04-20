@@ -56,9 +56,9 @@
                             <p>Status: Awaiting selection</p>
                         </div>
                         <div class="col2">
-                            <h:commandLink>Select an Applicant</h:commandLink>
+                            <h:commandLink action="jobdetails">Select an Applicant</h:commandLink>
                             <br></br>
-                             <h:commandLink>Withdraw Job</h:commandLink>
+                             <h:commandLink action="jobwithdrawn">Withdraw Job</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
@@ -69,7 +69,7 @@
                             <p>Status: Job in Progress</p>
                         </div>
                         <div class="col2">
-                            <h:commandLink  >Mark Job Complete</h:commandLink>
+                            <h:commandLink  action="jobcomplete">Mark Job Complete</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>

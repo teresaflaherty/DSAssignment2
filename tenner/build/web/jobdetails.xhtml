@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Job Overview</title>
+        <h:outputStylesheet library="css" name="stylesjobdetails.css"/>
+        <h:outputScript library="js" name="jquery.js" target="head" />
+    </h:head>
+    <h:body ><h:graphicImage id="logo_icon" library="img" name="logo.jpg"/>
+
+        <div class="flex-grid-halfs">
+            <div class="col colsmall"><h:form>
+                    <ui:repeat var="gig" value="#{1}">
+                        <h1>Title of Job</h1>
+                        <p>Status of Job</p>
+                        <p>Keywords: Job, keywords</p>
+                        <p class="job_desc">Job description: long thing </p>
+                        <h3>Expected Pay: €999</h3> 
+                        <h:commandLink class="apply_for_job" action="provideraccount">Go Back</h:commandLink>
+                        <h:commandLink class="back_to_job_list" action="provideraccount">Delete this Job</h:commandLink><!-- this will need to be hidden sometimes depending on status -->
+                    </ui:repeat>
+
+
+                </h:form></div>
+            <div class="col colbig" >
+                <h3>List of Applicants</h3>
+                <h:form>
+                <ui:repeat var="v" value="#{[1,2,3,4,5,6,7,8,9]}">
+                    <div class="profilejob">
+                        <div class="col1">
+                            <h3>Name of the Applicant</h3>
+                        </div>
+                        <div class="col2">
+                            <h:commandLink action="viewapplicant">view</h:commandLink>
+                        </div>
+                    </div>
+                </ui:repeat>
+               
+            </h:form></div>
+        </div>
+
+    </h:body>
+</html>
+
