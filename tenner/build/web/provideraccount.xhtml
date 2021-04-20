@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>My Account</title>
+        <h:outputStylesheet library="css" name="stylesmyaccount.css"/>
+        <h:outputScript library="js" name="jquery.js" target="head" />
+        <h:outputScript library="js" name="index.js" target="body" />
+    </h:head>
+    <h:body>
+        <div class="tab">
+            <h:graphicImage class="logo_icon" library="img" name="tenerr_w.png"/>
+            <button class="tablinks" onclick="openTab(event, 'postjob')" id="defaultOpen">Post a Job</button>
+            <button class="tablinks" onclick="openTab(event, 'jobs')">My Jobs</button>
+
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <h:form><h:commandLink id="logout" action="login">← Log out</h:commandLink></h:form>
+
+        </div>
+
+        <div id="postjob" class="tabcontent">
+            <h:form>
+
+                <h1> Post a Job </h1>
+                <legend>Describe the job</legend>
+
+                <label for="title">Job Title:</label>
+                <h:inputText id="name" value=""></h:inputText>
+
+                <label for="keywords">Keywords:</label>
+                <h:inputText id="keywords" value="" ></h:inputText>
+
+                <label for="offer">Offer amount in Euros:</label>
+                <h:inputText id="offer" onkeypress="if (event.which &lt; 48 || event.which &gt; 57) return false;"></h:inputText>
+                <label for="jobdesc">Job Description:</label>
+                <h:inputTextarea id="jobdesc" value=""></h:inputTextarea>
+
+                <h:commandButton type="submit" value="Post Job"></h:commandButton>
+
+            </h:form>
+        </div>
+
+        <div id="jobs" class="tabcontent">
+           <h1>My Jobs</h1>
+            <h:form>
+                <ui:repeat var="v" value="#{1}">
+                    <div class="profilejob">
+                        <div class="col1">
+                            <h3>The Title of the Job</h3>
+                            <p>Status: Awaiting selection</p>
+                        </div>
+                        <div class="col2">
+                            <h:commandLink>Select an Applicant</h:commandLink>
+                            <br></br>
+                             <h:commandLink>Withdraw Job</h:commandLink>
+                        </div>
+                    </div>
+                </ui:repeat>
+                <ui:repeat var="v" value="#{1}">
+                    <div class="profilejob">
+                        <div class="col1">
+                            <h3>The Title of the Job</h3>
+                            <p>Status: Job in Progress</p>
+                        </div>
+                        <div class="col2">
+                            <h:commandLink  >Mark Job Complete</h:commandLink>
+                        </div>
+                    </div>
+                </ui:repeat>
+                <ui:repeat var="v" value="#{1}">
+                    <div class="profilejob">
+                        <div class="col1">
+                            <h3>The Title of the Job</h3>
+                            <p>Status: Job Completed</p>
+                        </div>
+                        <div class="col2">
+                            
+                        </div>
+                    </div>
+                </ui:repeat>
+              
+            </h:form>
+        </div>
+
+    </h:body>
+</html>
+
