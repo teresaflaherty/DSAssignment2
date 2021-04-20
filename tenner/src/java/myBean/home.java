@@ -31,7 +31,7 @@ public class home {
     }
 
 //    RETURNS ALL JOBS WITH KEYWORDs OR ID THAT WAS SEARCHED
-    public String search() {
+    public ArrayList<job> search() {
         ArrayList<job> JobsList = new ArrayList<>();
         // need two nested try-blocks, as code in finally may throw exception
 
@@ -70,15 +70,6 @@ public class home {
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
                     
-                    // get data out - note: index starts at 1 !!!!
-//                    job = new job(result.getInt("JobID"),
-//                            result.getString("title"),
-//                            result.getString("keywords"),
-//                            result.getString("description"),
-//                            result.getInt("paymentoffer"),
-//                            result.getInt("Jobstatus"),
-//                            result.getInt("providerId"),
-//                            result.getInt("freelancerId"));
 
                     //Add values to list
                     JobsList.add(job);
@@ -107,21 +98,7 @@ public class home {
                     job.setJobstatus(result.getInt("Jobstatus"));
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
-                    
-                    
-                    
-                    
-                    
-                    // get data out - note: index starts at 1 !!!!
-//                    job = new job(result.getInt("JobID"),
-//                            result.getString("title"),
-//                            result.getString("keywords"),
-//                            result.getString("description"),
-//                            result.getInt("paymentoffer"),
-//                            result.getInt("Jobstatus"),
-//                            result.getInt("providerId"),
-//                            result.getInt("freelancerId"));
-
+ 
                     //Add values to list
                     JobsList.add(job);
                 }
@@ -142,19 +119,8 @@ public class home {
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
-        String html_output = "";
-        for (job searchedjob : JobsList) {
-             html_output += "<div class=\"col\">\n"
-                    + "                <div class=\"gig_card\">\n"
-                    + "                    <div class=\"gig_card_title\">\n"
-                    + "                        " + searchedjob.getTitle() + "\n"
-                    + "                    </div>\n"
-                    + "                    <h:commandLink class=\"view_gig\" action='#{home.openGig("+searchedjob.getId()+")}'>View Gig</h:commandLink\n"
-                    + "                </div>\n"
-                    + "            </div>";
-        }
-
-        return html_output;
+        
+        return JobsList;
     }
 
 //    RETURNS THE JOB DESCRIPTION OF A SELECTED GIG OR JOB WHEN PERSON CLICKS VIEW
@@ -188,15 +154,7 @@ public class home {
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
                     
-//                    // get data out - note: index starts at 1 !!!!
-//                    job = new job(result.getInt("JobID"),
-//                            result.getString("title"),
-//                            result.getString("keyword"),
-//                            result.getString("description"),
-//                            result.getInt("paymentoffer"),
-//                            result.getInt("Jobstatus"),
-//                            result.getInt("providerId"),
-//                            result.getInt("freelancerId"));
+
 
                     //Add values to list
                     JobsList.add(job);
@@ -223,7 +181,10 @@ public class home {
 
 //        RETURNS ALL JOBS, TO BE USED WHEN HOME.HTML IS OPENED
     public ArrayList<job> allJobs() {
+        String searched=getSearchjobterm();
+         
         ArrayList<job> JobsList = new ArrayList<>();
+        if(searched==null){
         // need two nested try-blocks, as code in finally may throw exception
         try {
             Connection connect = null;
@@ -253,15 +214,7 @@ public class home {
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
                     
-                    // get data out - note: index starts at 1 !!!!
-//                    job = new job(result.getInt("JobID"),
-//                            result.getString("title"),
-//                            result.getString("keywords"),
-//                            result.getString("description"),
-//                            result.getInt("paymentoffer"),
-//                            result.getInt("Jobstatus"),
-//                            result.getInt("providerId"),
-//                            result.getInt("freelancerId"));
+
                     //Add values to list
                     JobsList.add(job);
                 }
@@ -283,6 +236,11 @@ public class home {
         }
      
         System.out.println(JobsList);
+               }
+         else{
+             
+             JobsList=search();
+         }
         return JobsList;
     }
     
@@ -291,7 +249,10 @@ public class home {
 
     public void searchStringChanged(ValueChangeEvent vce) {
         searchjobterm = vce.getNewValue().toString();
-        search();
+        allJobs();
     }
+    
+    
+
 
 }
