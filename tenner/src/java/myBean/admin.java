@@ -93,7 +93,7 @@ public class admin {
                             pst.setInt(1, userID);
                             //execute the queries
                             pst.executeUpdate();
-                            break;
+                            return "provideraccount";
                         case "Freelancer":
                             String skills_string = String.join(",", skills);
                             //Prepare a query to insert values into Users table
@@ -108,7 +108,7 @@ public class admin {
                             pst.setInt(4, userID);
                             //execute the queries
                             pst.executeUpdate();
-                            break;
+                            return "home";
                         case "Administrator":
                             //Prepare a query to insert values into Providers table
                             query = "INSERT INTO Administrators (UserID) VALUES(?)";
@@ -123,8 +123,6 @@ public class admin {
                         default:
                             break;
                     }
-
-                    return "home";
                 }
 
             } finally {
@@ -255,12 +253,39 @@ public class admin {
                 result = pst.executeQuery();
                 
                 String password = "";
+                int userID = -1;
                 while (result.next()) {
                     password = result.getString("password");
+                    userID = result.getInt(1);
+                }
+                
+                query = "SELECT * FROM Providers WHERE UserID = ?";
+
+                //Connect to the database with queries
+                pst = connect.prepareStatement(query);
+
+                //Get text entered into textfields
+                //put them into the corresponding queries
+                pst.setInt(1, userID);
+
+                //execute the queries
+                result = pst.executeQuery();
+                
+                String type = "";
+                if (result.next()) {
+                    type = "Provider";
+                }
+                else {
+                    type = "Freelancer";
                 }
                 
                 if (entry_hashed.equals(password)) {
-                    return "home";
+                    if(type.equals("Freelancer")) {
+                        return "home";
+                    }
+                    else if (type.equals("Provider")) {
+                        return "provideraccount";
+                    }
                 }
             } finally {
                 if (stmt != null) {
