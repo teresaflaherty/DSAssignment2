@@ -23,7 +23,7 @@ import javax.enterprise.context.RequestScoped;
 @Named(value = "myaccount")
 @RequestScoped
 public class myaccount {
-        private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
+        private static final String URL = "jdbc:derby://localhost:1527/tenner";
     private static final String USER = "app";
 
    
@@ -32,9 +32,11 @@ public class myaccount {
 
 //    if status =3 then all jobs for provider are returned
     public ArrayList<job> getJob(String email,int status) {
+        System.out.println("Entered getjob");
         
       ArrayList<job> JobsList = new ArrayList<>();
-        int providerid=getUSERID(email);
+        int personid=getUSERID(email);
+        System.out.println(personid);
         try {
             Connection connect = null;
             Statement stmt = null;
@@ -50,10 +52,12 @@ public class myaccount {
 
                 if(status==3){
                     try{
-                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE PROVIDERID=" + providerid);
+                        System.out.println("Entered try ");
+                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE PROVIDERID=" + personid);
                    }
                    catch(Exception e){
-                        result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE FREELANCERRID=" + providerid);
+                       System.out.println("Entered catch ");
+                        result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE FREELANCERRID=" + personid);
                    }
                         
                     }
@@ -61,20 +65,23 @@ public class myaccount {
                 else{
                     
                     try{
-                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE (PROVIDERID=" + providerid+
+                        System.out.println("Entered try 2");
+                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE (PROVIDERID=" + personid+
                                 "AND JOBSTATUS="+status+")");
                    }
                    catch(Exception e){
-                       result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE (FREELANCERID=" + providerid+
+                       System.out.println("Entered catch2 ");
+                       result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE (FREELANCERID=" + personid+
                                 "AND JOBSTATUS="+status+")");
                    }
 
                     }
                 
-                
+                System.out.println("exited try");
                 job job;
                 while (result.next()) {
-
+                       System.out.println("Job infor");
+                       System.out.println(result.getInt("JobID"));
                     job= new job();
                     job.setId(result.getInt("JobID"));
                     job.setTitle(result.getString("title"));
@@ -112,14 +119,18 @@ public class myaccount {
     
     
     public int getUSERID(String email){
+        System.out.println(email);
+        System.out.println("Enter userid");
     int userID = -1;
     int personid=0;
     try {
                Connection connect = null;
                Statement stmt = null;
                Statement stmt2= null;
+               Statement stmt3= null;
                ResultSet result;
                ResultSet result2;
+               ResultSet result3;
                try {
                    // connect to db - make sure derbyclient.jar is added to your project
                    connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -141,9 +152,12 @@ public class myaccount {
                    while (result.next()) {
                        userID = result.getInt(1);
                    }
-                   String query2;
-                   try{
-                    query2 = "SELECT * FROM providers WHERE USERID = ?";
+                   System.out.println("USER ID IS ");
+                   System.out.println(userID);
+                   
+                   
+                       System.out.println(" userid try");
+                    String query2 = "SELECT * FROM providers WHERE USERID = ?";
                                        //Connect to the database with queries
                    PreparedStatement pst2 = connect.prepareStatement(query2);
                                       //Get text entered into textfields
@@ -156,23 +170,26 @@ public class myaccount {
                    while (result2.next()) {
                        personid = result2.getInt(1);
                    }
-                   }
-                   catch(Exception e){
-                       
-                        query2 = "SELECT * FROM Freelancers WHERE USERID = ?";
-                                          PreparedStatement pst2 = connect.prepareStatement(query2);
+                   
+                   
+                   if(personid <100){
+                       System.out.println(" userid catch");
+                     String query3 = "SELECT * FROM Freelancers WHERE USERID = ?";
+                                          PreparedStatement pst3 = connect.prepareStatement(query3);
                                       //Get text entered into textfields
                    //put them into the corresponding queries
-                   pst2.setInt(1, userID);
+                   pst3.setInt(1, userID);
                                       //execute the queries
-                   result2 = pst2.executeQuery();
+                   result3 = pst3.executeQuery();
 
 
-                   while (result2.next()) {
-                       personid = result2.getInt(1);
+                   while (result3.next()) {
+                       personid = result3.getInt(1);
                    }
                    }
-
+                   System.out.println(" RESULTING ID");
+                   System.out.println(personid);
+               
 
                    
 
