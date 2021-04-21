@@ -15,7 +15,7 @@
             <div class="col colsmall"><h:form>
                     #{job.id}
                     <ui:repeat var="gig" value="#{home.getJobDescription(job.id)}">
-                        #{gig.freelancerId}
+                       
                         <h1>#{gig.title}</h1>
                         <p>Status of Job:Open</p>
                         <p>Keywords: #{gig.keywords}</p>
@@ -35,7 +35,7 @@
                     <ui:repeat var="v" value="#{provider.getoffers(job.id)}">
                     <div class="profilejob">
                         <div class="col1">
-                            #{v.freelancerId}
+                            
                             <h3>#{provider.getFreelancer(v.freelancerId)}</h3>
                         </div>
                         <div class="col2">
