@@ -19,7 +19,7 @@ import java.sql.*;
  */
 public class freelancer {
     
-    private static final String URL = "jdbc:derby://localhost:1527/sample";
+    private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
     private static final String USER = "app";
     private static final String PASSWD = "app"; 
     

@@ -17,7 +17,7 @@ import javax.enterprise.context.SessionScoped;
 @SessionScoped
 public class home implements Serializable{
 
-    private static final String URL = "jdbc:derby://localhost:1527/sample";
+    private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
     private static final String USER = "app";
 
    
