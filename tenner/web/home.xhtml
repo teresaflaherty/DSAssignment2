@@ -41,7 +41,7 @@ and open the template in the editor.
                 <div class="gig_card">
                     <div class="gig_card_title">#{r.title}
                     </div>
-                    <h:commandLink class="view_gig" action="#{job.openGig()}">View Gig
+                    <h:commandLink class="view_gig" action="gig">View Gig
                     <f:setPropertyActionListener target="#{job.id}" value="#{r.id}"/>
 
                     </h:commandLink>

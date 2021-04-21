@@ -34,21 +34,16 @@ public class job implements Serializable {
         this.freelancerId=freelancerId;
     }
 
-        public job(){
+    public job(){
         
     }
+    
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-   
-    public String openGig()
-    {
-        return "gig";
     }
     
     //Getters
@@ -108,7 +103,7 @@ public class job implements Serializable {
         this.freelancerId = freelancerId;
     }
     
-   public int getFreelancerId(){
+    public int getFreelancerId(){
         return freelancerId;
     }  
    

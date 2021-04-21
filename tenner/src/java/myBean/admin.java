@@ -27,7 +27,7 @@ public class admin {
         
         try {
             try{
-                password = hash_password(password);
+                password = hashPassword(password);
             }
             catch(NoSuchAlgorithmException e) {
                 System.out.println(e.getMessage());
@@ -79,7 +79,7 @@ public class admin {
                     result = stmt.executeQuery("SELECT MAX(UserID) FROM Users");
                     int userID = 1000;
                     while (result.next()) {
-                        userID = result.getInt(1);
+                        userID = result.getInt("UserID");
                     }
 
                     switch (type) {
@@ -119,9 +119,9 @@ public class admin {
                             pst.setInt(1, userID);
                             //execute the queries
                             pst.executeUpdate();
-                            break;
+                            return "adminpage";
                         default:
-                            break;
+                            return null;
                     }
                 }
 
@@ -142,6 +142,87 @@ public class admin {
             System.out.println(sql.getSQLState());
             return null;
         }
+    }
+    
+    public String editProfile(String name, String email, String password, ArrayList<String> skills, String bio){
+        int freelancerID = 1000;
+        try {
+            try{
+                password = hashPassword(password);
+            }
+            catch(NoSuchAlgorithmException e) {
+                System.out.println(e.getMessage());
+            }
+
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                // connect to db - make sure derbyclient.jar is added to your project
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+
+                // Retrieve UserID from type and ID
+                String query = "SELECT * FROM Freelancers WHERE FreelancerID = ?";
+                //Connect to the database with queries
+                PreparedStatement pst = connect.prepareStatement(query);
+                //Get text entered into textfields
+                //put them into the corresponding queries
+                pst.setInt(1, freelancerID);
+                //execute the queries
+                result = pst.executeQuery();
+
+                int userID = -1;
+                while (result.next()) {
+                    userID = result.getInt("UserID");
+                }
+
+                query = "UPDATE Users SET Name = ?, Email = ?, Password = ? WHERE UserID = ?";
+
+                //Connect to the database with queries
+                pst = connect.prepareStatement(query);
+
+                //Get text entered into textfields
+                //put them into the corresponding queries
+                pst.setString(1, name);
+                pst.setString(2, email);
+                pst.setString(3, password);
+                pst.setInt(4, userID);
+                
+                pst.executeUpdate();
+                
+                
+                String skills_string = String.join(",", skills);
+                //Prepare a query to insert values into Users table
+                query = "UPDATE Freelancers SET Skills = ?, Message = ? WHERE FreelancerID = ?";
+
+                //Connect to the database with queries
+                pst = connect.prepareStatement(query);
+
+                //Get text entered into textfields
+                //put them into the corresponding queries
+                pst.setString(1, skills_string);
+                pst.setString(2, bio);
+                pst.setInt(3, freelancerID);
+
+                //execute the queries
+                pst.executeUpdate();
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+        // deal with any potential exceptions
+        // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return null;
     }
     
     
@@ -222,12 +303,12 @@ public class admin {
     }
     
     
-    public String login(String email, String password_entry) {
+    public String login(String email, String passwordEntry) {
         
         try {
-            String entry_hashed = "";
+            String entryHashed = "";
             try{
-                entry_hashed = hash_password(password_entry);
+                entryHashed = hashPassword(passwordEntry);
             }
             catch(NoSuchAlgorithmException e) {
                 System.out.println(e.getMessage());
@@ -271,7 +352,7 @@ public class admin {
                 //execute the queries
                 result = pst.executeQuery();
                 
-                String type = "";
+                String type;
                 if (result.next()) {
                     type = "Provider";
                 }
@@ -279,12 +360,18 @@ public class admin {
                     type = "Freelancer";
                 }
                 
-                if (entry_hashed.equals(password)) {
-                    if(type.equals("Freelancer")) {
-                        return "home";
-                    }
-                    else if (type.equals("Provider")) {
-                        return "provideraccount";
+                // If password given matches the one on file
+                if (entryHashed.equals(password)) {
+                    // Have frontend redirect according to user type
+                    switch (type) {
+                        case "Freelancer":
+                            return "home";
+                        case "Provider":
+                            return "provideraccount";
+                        case "Administrator":
+                            return "adminpage";
+                        default:
+                            return null;
                     }
                 }
             } finally {
@@ -308,7 +395,7 @@ public class admin {
     }
     
     
-    public String hash_password(String password) throws NoSuchAlgorithmException {
+    public String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         

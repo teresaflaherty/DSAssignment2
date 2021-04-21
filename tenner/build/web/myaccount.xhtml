@@ -30,19 +30,18 @@
             <h:form>
 
                 <h1> Edit Your Profile </h1>
-                    #{bean.email}
 
 
                 <legend><span class="number">1</span> Your Basic Info</legend>
 
                 <label for="name">Name:</label>
-                <h:inputText id="name" value=""></h:inputText>
+                <h:inputText id="name" value="#{bean.name}"></h:inputText>
 
                 <label for="email">Email:</label>
-                <h:inputText id="email" value="" ></h:inputText>
+                <h:inputText id="email" value="#{bean.email}" ></h:inputText>
 
                 <label for="password">Password:</label>
-                <h:inputSecret id="password" value=""></h:inputSecret>
+                <h:inputSecret id="password" value="#{bean.password}"></h:inputSecret>
 
 
 
@@ -52,12 +51,12 @@
                     <legend><span class="number">2</span> About You</legend>
 
                     <label for="bio">Bio:</label>
-                    <h:inputTextarea id="bio" value=""></h:inputTextarea>
+                    <h:inputTextarea id="bio" value="#{bean.bio}"></h:inputTextarea>
 
                     <div class="fullwch skill">
                         <label>Skills:</label>
 
-                        <h:selectManyCheckbox value="">
+                        <h:selectManyCheckbox value="#{bean.skills}">
                             <f:selectItem itemValue="skill_nodejs" itemLabel="Node.JS" />
                             <f:selectItem itemValue="skill_php" itemLabel="PHP" />
 
@@ -69,7 +68,7 @@
                 </fieldset>
 
 
-                <h:commandButton type="submit" value="Save Profile"></h:commandButton>
+                <h:commandButton type="submit" value="Save Profile" action="#{admin.editProfile(bean.name, bean.email, bean.password, bean.skills, bean.bio)}"></h:commandButton>
 
             </h:form>
         </div>
