@@ -259,3 +259,26 @@ label.light {
     margin-bottom: 0px;
     margin-top: 0px;
 }
+
+.row
+{
+     display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.row > .halfcol
+{
+   width: 49%;
+    display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  height: 80%;
+  overflow-y: auto;
+  overflow-x: visible;
+}
+.halfcol > h1{
+    text-align: left!important;
+}
+.halfcol > form{
+    max-width:100%;
+}
