@@ -69,7 +69,9 @@
                             <p>Status: Job in Progress</p>
                         </div>
                         <div class="col2">
-                            <h:commandLink  action="jobcomplete">Mark Job Complete</h:commandLink>
+                            <h:commandLink  action="jobcomplete">Mark Job Complete
+                                <f:setPropertyActionListener target="#{job.id}" value="#{v.id}"/>
+                            </h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>

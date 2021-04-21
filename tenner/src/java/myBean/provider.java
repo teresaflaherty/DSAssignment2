@@ -224,7 +224,7 @@ public class provider {
                     connect = DriverManager.getConnection(URL, USER, PASSWD);
 
                      //Prepare a query to insert values into JOBDescriptions table
-                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=1 WHERE id="+job_id;
+                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=1 WHERE JOBID="+job_id;
 
                     //Connect to the database with queries
                     PreparedStatement pst = connect.prepareStatement(query);
@@ -257,18 +257,19 @@ public class provider {
   }
 
   public void mark_done(int job_id){
-          
+          System.out.println("Entered mark done");
       try {
                 Connection connect = null;
                 Statement stmt = null;
                 ResultSet result;
                 String data = "Results:\n"; 
                     try {
+                        System.out.println("Updating");
                     // connect to db - make sure derbyclient.jar is added to your project
                     connect = DriverManager.getConnection(URL, USER, PASSWD);
 
                      //Prepare a query to insert values into JOBDescriptions table
-                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=2 WHERE id="+job_id;
+                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=2 WHERE JOBID="+job_id;
 
                     //Connect to the database with queries
                     PreparedStatement pst = connect.prepareStatement(query);

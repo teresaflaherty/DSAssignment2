@@ -6,7 +6,8 @@
         <title>Your Application is complete</title>
         <h:outputStylesheet library="css" name="stylesapplicationcomp.css"/>
     </h:head>
-    <h:body>
+    <h:body onload="#{provider.mark_done(job.id)}">
+        
         <h:graphicImage class="animated" library="img" name="jobcomplete.gif"/>
         <h1> Yay! Your job has been completed.</h1>
         <p>Thanks for using Tenner.</p>

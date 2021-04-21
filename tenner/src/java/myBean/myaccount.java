@@ -32,11 +32,10 @@ public class myaccount {
 
 //    if status =3 then all jobs for provider are returned
     public ArrayList<job> getJob(String email,int status) {
-        System.out.println("Entered getjob");
-        
+       
       ArrayList<job> JobsList = new ArrayList<>();
         int personid=getUSERID(email);
-        System.out.println(personid);
+
         try {
             Connection connect = null;
             Statement stmt = null;
@@ -52,11 +51,11 @@ public class myaccount {
 
                 if(status==3){
                     try{
-                        System.out.println("Entered try ");
+                       
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE PROVIDERID=" + personid);
                    }
                    catch(Exception e){
-                       System.out.println("Entered catch ");
+                      
                         result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE FREELANCERRID=" + personid);
                    }
                         
@@ -65,23 +64,21 @@ public class myaccount {
                 else{
                     
                     try{
-                        System.out.println("Entered try 2");
+                 
                     result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE (PROVIDERID=" + personid+
                                 "AND JOBSTATUS="+status+")");
                    }
                    catch(Exception e){
-                       System.out.println("Entered catch2 ");
+
                        result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE (FREELANCERID=" + personid+
                                 "AND JOBSTATUS="+status+")");
                    }
 
                     }
-                
-                System.out.println("exited try");
+
                 job job;
                 while (result.next()) {
-                       System.out.println("Job infor");
-                       System.out.println(result.getInt("JobID"));
+
                     job= new job();
                     job.setId(result.getInt("JobID"));
                     job.setTitle(result.getString("title"));
@@ -119,8 +116,7 @@ public class myaccount {
     
     
     public int getUSERID(String email){
-        System.out.println(email);
-        System.out.println("Enter userid");
+
     int userID = -1;
     int personid=0;
     try {
@@ -152,11 +148,7 @@ public class myaccount {
                    while (result.next()) {
                        userID = result.getInt(1);
                    }
-                   System.out.println("USER ID IS ");
-                   System.out.println(userID);
-                   
-                   
-                       System.out.println(" userid try");
+
                     String query2 = "SELECT * FROM providers WHERE USERID = ?";
                                        //Connect to the database with queries
                    PreparedStatement pst2 = connect.prepareStatement(query2);
@@ -173,7 +165,7 @@ public class myaccount {
                    
                    
                    if(personid <100){
-                       System.out.println(" userid catch");
+
                      String query3 = "SELECT * FROM Freelancers WHERE USERID = ?";
                                           PreparedStatement pst3 = connect.prepareStatement(query3);
                                       //Get text entered into textfields
@@ -187,9 +179,7 @@ public class myaccount {
                        personid = result3.getInt(1);
                    }
                    }
-                   System.out.println(" RESULTING ID");
-                   System.out.println(personid);
-               
+
 
                    
 
