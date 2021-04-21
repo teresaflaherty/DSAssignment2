@@ -6,7 +6,7 @@
         <title>Your Application is complete</title>
         <h:outputStylesheet library="css" name="stylesapplicationcomp.css"/>
     </h:head>
-    <h:body>
+    <h:body onload="#{provider.remove_job(job.id)}">
         <h:graphicImage class="animated" library="img" name="sad.gif"/>
         <h1>You've withdrawn your job..</h1>
         <p>Somewhere out there, a freelancer cries, but it's ok, we understand.</p>

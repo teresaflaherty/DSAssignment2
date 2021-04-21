@@ -59,7 +59,9 @@ public class provider {
                 try {
             Connection connect = null;
             Statement stmt = null;
+            Statement stmt2 = null;
             ResultSet result;
+            ResultSet result2;
             String data = "Results:\n"; 
                 try {
                 // connect to db - make sure derbyclient.jar is added to your project
@@ -69,15 +71,18 @@ public class provider {
 //                id= Integer.parseInt(Jobid);
                 
                  //Prepare a query to insert values into Athlete Coaches table
-                String query = "DELETE FROM JOBDescriptions where id="+Jobid;
-
-                //Connect to the database with queries
+                String query = "DELETE FROM FREELANCEROFFERS where JOBID="+Jobid;
                 PreparedStatement pst = connect.prepareStatement(query);
-                
-
-                
                 //execute the queries
                 pst.executeUpdate();
+                
+                String query2 = "DELETE FROM JOBDescriptions where JOBID="+Jobid;
+
+                //Connect to the database with queries
+                PreparedStatement pst2 = connect.prepareStatement(query2);
+                
+                //execute the queries
+                pst2.executeUpdate();
                 
                                 //Get text entered into textfields
                 //put them into the corresponding queries

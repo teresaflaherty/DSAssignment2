@@ -25,8 +25,6 @@ import javax.enterprise.context.RequestScoped;
 public class myaccount {
         private static final String URL = "jdbc:derby://localhost:1527/tenner";
     private static final String USER = "app";
-
-   
     private static final String PASSWD = "app";
 
 

@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Job Overview</title>
         <h:outputStylesheet library="css" name="stylesjobdetails.css"/>
@@ -21,7 +22,9 @@
                         <p class="job_desc">Job description: #{gig.description} </p>
                         <h3>Expected Pay: #{gig.payment}</h3> 
                         <h:commandLink class="apply_for_job" action="provideraccount">Go Back</h:commandLink>
-                        <h:commandLink class="back_to_job_list" action="provideraccount">Delete this Job</h:commandLink><!-- this will need to be hidden sometimes depending on status -->
+                        <h:commandLink class="back_to_job_list" action="jobwithdrawn">Delete this Job
+                            <f:setPropertyActionListener target="#{job.id}" value="#{gig.id}"/>
+                            </h:commandLink><!-- this will need to be hidden sometimes depending on status -->
                     
 
 </ui:repeat>
