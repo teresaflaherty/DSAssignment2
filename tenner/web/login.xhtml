@@ -25,7 +25,10 @@
           <h:inputSecret id="password" value="#{bean.password}"></h:inputSecret>
         </fieldset>
 
-        <h:commandButton type="submit" action="#{admin.login(bean.email, bean.password)}" value="Log in"></h:commandButton>
+        <h:commandButton type="submit" action="#{admin.login(bean.email, bean.password)}" value="Log in">
+            <f:setPropertyActionListener target="#{bean.email}" value="#{bean.email}"/>
+        </h:commandButton>
+
         
        </h:form>
     

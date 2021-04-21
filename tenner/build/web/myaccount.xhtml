@@ -76,36 +76,51 @@
         <div id="jobs" class="tabcontent">
             <h1>My Jobs</h1>
             <h:form>
-                <ui:repeat var="v" value="#{provider.getJob(bean.email, 3)}">
+                <h2>All Jobs</h2>
+                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 3)}">
                     <div class="profilejob">
                         <div class="col1">
-                            <h3>The Title of the Job</h3>
-                            <p>Status: Application Pending</p>
+                            <h3>#{v.title}</h3>
+                            <p>Description: #{v.description}</p>
                         </div>
                         <div class="col2">
                             <h:commandLink>Withdraw Application</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
-                <ui:repeat var="v" value="#{provider.getJob(bean.email, 3)}">
+                
+                <br/>
+                <br/>
+                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 1)}">
                     <div class="profilejob">
                         <div class="col1">
-                            <h3>The Title of the Job</h3>
-                            <p>Status: Job in Progress</p>
+                            <h3>#{v.title}</h3>
+                            <p>Status: Job accepted by Freelancer</p>
                         </div>
                         <div class="col2">
                         </div>
                     </div>
                 </ui:repeat>
               
-                <ui:repeat var="v" value="#{provider.getJob(bean.email, 3)}">
+                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 2)}">
                     <div class="profilejob">
                         <div class="col1">
-                            <h3>The Title of the Job</h3>
+                            <h3>#{v.title}</h3>
                             <p>Status: Job Completed</p>
                         </div>
                         <div class="col2">
                             
+                        </div>
+                    </div>
+                </ui:repeat>
+                
+                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 0)}">
+                    <div class="profilejob">
+                        <div class="col1">
+                            <h3>#{v.title}</h3>
+                            <p>Status:Open</p>
+                        </div>
+                        <div class="col2">
                         </div>
                     </div>
                 </ui:repeat>

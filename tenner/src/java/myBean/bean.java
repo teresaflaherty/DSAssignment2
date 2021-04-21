@@ -5,17 +5,19 @@
  */
 package myBean;
 
-import java.util.List;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *
- * @author gabed
+ * @author my pc
  */
 @Named(value = "bean")
-@RequestScoped
-public class bean {
+@SessionScoped
+public class bean implements Serializable {
+
 
     /**
      * Creates a new instance of bean

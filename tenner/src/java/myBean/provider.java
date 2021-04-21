@@ -114,51 +114,7 @@ public class provider {
         }
     
     }
-//  Convention: 0= Job open
-//              1= Freelancer is chosen
-//              2= Job is closed
-  public void job_status(int Jobid,int status){
-    try {
-                Connection connect = null;
-                Statement stmt = null;
-                ResultSet result;
-                String data = "Results:\n"; 
-                    try {
-                    // connect to db - make sure derbyclient.jar is added to your project
-                    connect = DriverManager.getConnection(URL, USER, PASSWD);
 
-                     //Prepare a query to insert values into JOBDescriptions table
-                    String query = "UPDATE JOBDescriptions SET JOBSTATUS="+status+"WHERE id="+Jobid;
-
-                    //Connect to the database with queries
-                    PreparedStatement pst = connect.prepareStatement(query);
-
-
-
-                    //execute the queries
-                    pst.executeUpdate();
-
-                                    //Get text entered into textfields
-                    //put them into the corresponding queries
-
-                } finally {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                    if (connect != null) {
-                        connect.close();
-                    }
-                }
-
-                // deal with any potential exceptions
-                // note: all resources are closed automatically - no need for finally
-            } catch (SQLException sql) {
-                //sql.printStackTrace();
-                System.out.println(sql.getMessage());
-                System.out.println(sql.getSQLState());
-            }
-      
-  }
 //    if status =3 then all jobs for provider are returned
     public ArrayList<job> getJob(String email,int status) {
         
@@ -223,5 +179,93 @@ public class provider {
         }
         return JobsList;
     }
+    
+    
+    public void accept_offer(int job_id){
+    
+      try {
+                Connection connect = null;
+                Statement stmt = null;
+                ResultSet result;
+                String data = "Results:\n"; 
+                    try {
+                    // connect to db - make sure derbyclient.jar is added to your project
+                    connect = DriverManager.getConnection(URL, USER, PASSWD);
+
+                     //Prepare a query to insert values into JOBDescriptions table
+                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=1 WHERE id="+job_id;
+
+                    //Connect to the database with queries
+                    PreparedStatement pst = connect.prepareStatement(query);
+
+
+
+                    //execute the queries
+                    pst.executeUpdate();
+
+                                    //Get text entered into textfields
+                    //put them into the corresponding queries
+
+                } finally {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                    if (connect != null) {
+                        connect.close();
+                    }
+                }
+
+                // deal with any potential exceptions
+                // note: all resources are closed automatically - no need for finally
+            } catch (SQLException sql) {
+                //sql.printStackTrace();
+                System.out.println(sql.getMessage());
+                System.out.println(sql.getSQLState());
+            } 
+      
+  }
+
+  public void mark_done(int job_id){
+          
+      try {
+                Connection connect = null;
+                Statement stmt = null;
+                ResultSet result;
+                String data = "Results:\n"; 
+                    try {
+                    // connect to db - make sure derbyclient.jar is added to your project
+                    connect = DriverManager.getConnection(URL, USER, PASSWD);
+
+                     //Prepare a query to insert values into JOBDescriptions table
+                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=2 WHERE id="+job_id;
+
+                    //Connect to the database with queries
+                    PreparedStatement pst = connect.prepareStatement(query);
+
+
+
+                    //execute the queries
+                    pst.executeUpdate();
+
+                                    //Get text entered into textfields
+                    //put them into the corresponding queries
+
+                } finally {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                    if (connect != null) {
+                        connect.close();
+                    }
+                }
+
+                // deal with any potential exceptions
+                // note: all resources are closed automatically - no need for finally
+            } catch (SQLException sql) {
+                //sql.printStackTrace();
+                System.out.println(sql.getMessage());
+                System.out.println(sql.getSQLState());
+            } 
+  }
     
 }
