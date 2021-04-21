@@ -21,7 +21,67 @@ public class freelancer {
     
     private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
     private static final String USER = "app";
-    private static final String PASSWD = "app"; 
+    private static final String PASSWD = "app";
+    
+    private int id, userId, balance;
+    private String bio, skills;
+    
+    public freelancer(int id, int userId, int balance, String bio, String skills){
+        this.id=id;
+        this.userId=userId;
+        this.balance=balance;
+        this.bio=bio;
+        this.skills=skills;
+    }
+
+    public freelancer(){
+        
+    }
+    
+    
+    //Getters
+    public int getId(){
+        return id;
+    }
+        
+    public int getUserId(){
+        return userId;
+    }
+    
+    public int getBalance(){
+        return balance;
+    }
+    
+    public String getBio(){
+        return bio;
+    }
+      
+    public String getSkills(){
+        return skills;
+    }
+
+    
+    //Setters
+    public void setId(int id){
+        this.id = id;
+    }
+        
+    public void setUserId(int userId){
+        this.userId = userId;
+    }
+    
+    public void setBalance(int balance){
+        this.balance = balance;
+    }
+    
+    public void setBio(String bio){
+        this.bio = bio;
+    }
+      
+    public void setSkills(String skills){
+        this.skills = skills;
+    }
+    
     
     public void jobstatus(int Jobid, int jobstatus){
         

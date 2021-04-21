@@ -19,6 +19,37 @@ public class provider {
     private static final String USER = "app";
     private static final String PASSWD = "app";
     
+    private int id, userId;
+    
+    public provider(int id, int userId){
+        this.id=id;
+        this.userId=userId;
+    }
+
+    public provider(){
+        
+    }
+    
+    
+    //Getters
+    public int getId(){
+        return id;
+    }
+        
+    public int getUserId(){
+        return userId;
+    }
+    
+    
+    //Setters
+    public void setId(int id){
+        this.id = id;
+    }
+        
+    public void setUserId(int userId){
+        this.userId = userId;
+    }
+    
     
     //This removes a job posting, the int JOBID can be changed for an String
     // Just uncomment the int id on line 36-37

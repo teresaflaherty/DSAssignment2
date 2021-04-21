@@ -22,6 +22,37 @@ public class admin {
     private static final String USER = "app";
     private static final String PASSWD = "app";
     
+    private int id, userId;
+    
+    public admin(int id, int userId){
+        this.id=id;
+        this.userId=userId;
+    }
+
+    public admin(){
+        
+    }
+    
+    
+    //Getters
+    public int getId(){
+        return id;
+    }
+        
+    public int getUserId(){
+        return userId;
+    }
+    
+    
+    //Setters
+    public void setId(int id){
+        this.id = id;
+    }
+        
+    public void setUserId(int userId){
+        this.userId = userId;
+    }
+    
     
     public String registerUser(String name, String password,String email, String type, ArrayList<String> skills, String bio){
         
@@ -77,10 +108,12 @@ public class admin {
                     //stores UserID to insert into Provider/Freelancer table
                     stmt = connect.createStatement();
                     result = stmt.executeQuery("SELECT MAX(UserID) FROM Users");
-                    int userID = 1000;
+                    int userID = -1;
                     while (result.next()) {
-                        userID = result.getInt("UserID");
+                        userID = result.getInt(1);
                     }
+                    
+                    
 
                     switch (type) {
                         case "Provider":

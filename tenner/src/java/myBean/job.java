@@ -37,14 +37,7 @@ public class job implements Serializable {
     public job(){
         
     }
-    
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+   
     
     //Getters
     public int getId(){
@@ -58,7 +51,7 @@ public class job implements Serializable {
         return keywords;
     }
     
-    public String getDescript(){
+    public String getDescription(){
         return description;
     }
       
@@ -73,8 +66,16 @@ public class job implements Serializable {
     public int getProviderId(){
         return providerId;
     }
+    
+    public int getFreelancerId(){
+        return freelancerId;
+    } 
 
-    //    //Setters
+    //Setters
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public void setTitle(String title) {
         this.title = title;
     }
@@ -82,9 +83,9 @@ public class job implements Serializable {
     public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setPayment(int payment) {
@@ -101,10 +102,5 @@ public class job implements Serializable {
 
     public void setFreelancerId(int freelancerId) {
         this.freelancerId = freelancerId;
-    }
-    
-    public int getFreelancerId(){
-        return freelancerId;
-    }  
-   
+    } 
 }
