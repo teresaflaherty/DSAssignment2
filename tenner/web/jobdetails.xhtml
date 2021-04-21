@@ -12,25 +12,28 @@
 
         <div class="flex-grid-halfs">
             <div class="col colsmall"><h:form>
-                    <ui:repeat var="gig" value="#{1}">
-                        <h1>Title of Job</h1>
-                        <p>Status of Job</p>
-                        <p>Keywords: Job, keywords</p>
-                        <p class="job_desc">Job description: long thing </p>
-                        <h3>Expected Pay: €999</h3> 
+                    #{job.id}
+                    <ui:repeat var="gig" value="#{home.getJobDescription(job.id)}">
+                        #{gig.freelancerId}
+                        <h1>#{gig.title}</h1>
+                        <p>Status of Job:Open</p>
+                        <p>Keywords: #{gig.keywords}</p>
+                        <p class="job_desc">Job description: #{gig.description} </p>
+                        <h3>Expected Pay: #{gig.payment}</h3> 
                         <h:commandLink class="apply_for_job" action="provideraccount">Go Back</h:commandLink>
                         <h:commandLink class="back_to_job_list" action="provideraccount">Delete this Job</h:commandLink><!-- this will need to be hidden sometimes depending on status -->
-                    </ui:repeat>
+                    
 
-
+</ui:repeat>
                 </h:form></div>
             <div class="col colbig" >
                 <h3>List of Applicants</h3>
                 <h:form>
-                <ui:repeat var="v" value="#{[1,2,3,4,5,6,7,8,9]}">
+                    <ui:repeat var="v" value="#{provider.getoffers(job.id)}">
                     <div class="profilejob">
                         <div class="col1">
-                            <h3>Name of the Applicant</h3>
+                            #{v.freelancerId}
+                            <h3>#{provider.getFreelancer(v.freelancerId)}</h3>
                         </div>
                         <div class="col2">
                             <h:commandLink action="viewapplicant">view</h:commandLink>

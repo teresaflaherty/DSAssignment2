@@ -6,9 +6,10 @@
         <title>Your Application is complete</title>
         <h:outputStylesheet library="css" name="stylesapplicationcomp.css"/>
     </h:head>
-    <h:body>
+    <h:body onload="#{freelancer.apply(job.id,bean.email)}">
         <h:graphicImage class="animated" library="img" name="Completed.gif"/>
         <h1>Your job application has been completed</h1>
+        
         <p>Check back soon to see if you've been successful.</p>
         <h:form><h:commandLink class="apply_for_job" action="home">Back to home</h:commandLink></h:form>
          

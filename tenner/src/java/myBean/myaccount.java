@@ -75,7 +75,7 @@ public class myaccount {
                    }
 
                     }
-
+                
                 job job;
                 while (result.next()) {
 

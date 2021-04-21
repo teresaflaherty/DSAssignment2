@@ -56,7 +56,9 @@
                             <p>Status: Awaiting selection</p>
                         </div>
                         <div class="col2">
-                            <h:commandLink action="jobdetails">Select an Applicant</h:commandLink>
+                            <h:commandLink action="jobdetails">Select an Applicant
+                            <f:setPropertyActionListener target="#{job.id}" value="#{v.id}"/>
+                            </h:commandLink>
                             <br></br>
                              <h:commandLink action="jobwithdrawn">Withdraw Job</h:commandLink>
                         </div>
