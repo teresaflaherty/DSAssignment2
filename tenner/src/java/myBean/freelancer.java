@@ -82,6 +82,55 @@ public class freelancer {
         this.skills = skills;
     }
     
+        public int getFreeLancerBal(String email){
+            int id= getUSERID(email);
+            int balance=0;
+            try {
+               Connection connect = null;
+               Statement stmt = null;
+
+               ResultSet result;
+
+               try {
+                   // connect to db - make sure derbyclient.jar is added to your project
+                   connect = DriverManager.getConnection(URL, USER, PASSWD);
+
+                   // Retrieve UserID from type and ID
+                   String query = "SELECT * FROM FREELANCERS WHERE USERID= ?";
+
+                   //Connect to the database with queries
+                   PreparedStatement pst = connect.prepareStatement(query);
+
+                   //Get text entered into textfields
+                   //put them into the corresponding queries
+                   pst.setInt(1, id);
+
+                   //execute the queries
+                   result = pst.executeQuery();
+
+
+                   while (result.next()) {
+                       balance = result.getInt(1);
+                   }
+
+               } finally {
+                   if (stmt != null) {
+                       stmt.close();
+                   }
+                   if (connect != null) {
+                       connect.close();
+                   }
+               }
+
+           // deal with any potential exceptions
+           // note: all resources are closed automatically - no need for finally
+           } catch (SQLException sql) {
+               //sql.printStackTrace();
+               System.out.println(sql.getMessage());
+               System.out.println(sql.getSQLState());
+           }
+        return balance;
+    }
     public void apply(int job_id, String email){
 
     int freelancerid=getUSERID(email);
