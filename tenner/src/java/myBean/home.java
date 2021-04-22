@@ -263,7 +263,7 @@ public class home implements Serializable{
     
     
     // Returns a list of all freelancers
-    public ArrayList<freelancer> getAllFreelancers() {
+    public ArrayList<freelancer> getAllFreelancers(int id) {
         ArrayList<freelancer> FreelancersList = new ArrayList<>();
         
         try {
