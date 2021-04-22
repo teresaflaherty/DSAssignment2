@@ -29,6 +29,14 @@ public class bean implements Serializable {
     private List<String> skills;
     private String type; //freelancer or provider
     
+    public bean(String name, String password,String email,String bio,List<String> skills,String type){
+        this.name=name;
+        this.password=password;
+        this.email=email;
+        this.bio=bio;
+        this.skills=skills;
+        this.type=type;
+    }
     
     
     public String getType(){

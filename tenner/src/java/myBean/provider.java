@@ -9,6 +9,7 @@ import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Named(value = "provider")
 @RequestScoped
@@ -250,8 +251,8 @@ public class provider {
   }
  
   
-public String getFreelancer(int freelancerid){
-
+public bean getFreelancer(int freelancerid){
+    bean freelancer = new bean();
     int userID = -1;
 
     String name=null;
@@ -267,7 +268,7 @@ public String getFreelancer(int freelancerid){
                    connect = DriverManager.getConnection(URL, USER, PASSWD);
 
                    // Retrieve UserID from type and ID
-                   String query = "SELECT USERID FROM FREELANCERS WHERE freelancerid =?";
+                   String query = "SELECT * FROM FREELANCERS WHERE freelancerid =?";
 
                    //Connect to the database with queries
                    PreparedStatement pst = connect.prepareStatement(query);
@@ -279,12 +280,14 @@ public String getFreelancer(int freelancerid){
                    //execute the queries
                    result = pst.executeQuery();
 
-
+                   
                    while (result.next()) {
                        userID = result.getInt(1);
-
+                       freelancer.setBio(result.getString(2));
+                       freelancer.setSkills((List<String>) result.getArray(3));
+                      
                    }
-
+                    System.out.println(freelancer.getBio());
                     String query2 = "SELECT * FROM users WHERE USERID = ?";
                                        //Connect to the database with queries
                    PreparedStatement pst2 = connect.prepareStatement(query2);
@@ -294,9 +297,11 @@ public String getFreelancer(int freelancerid){
                                       //execute the queries
                    result2 = pst2.executeQuery();
 
-
+                   
                    while (result2.next()) {
-                       name = result2.getString(2);
+                       freelancer.setName(result2.getString(2));
+                       freelancer.setEmail(result2.getString(3));
+                       
                    }
 
                } finally {
@@ -315,12 +320,13 @@ public String getFreelancer(int freelancerid){
                System.out.println(sql.getMessage());
                System.out.println(sql.getSQLState());
            }
-
-    return name;
+System.out.println(freelancer.getName());
+    return freelancer;
   }
 
-public ArrayList<job> getoffers(int job_id) {
-       
+public ArrayList<bean> getoffers(int job_id) {
+     ArrayList<bean> freelancerList = new ArrayList<>();
+     bean freelancerList2 = null;
      ArrayList<job> JobsList = new ArrayList<>();
         
         try {
@@ -334,7 +340,7 @@ public ArrayList<job> getoffers(int job_id) {
                 stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM FREELANCEROFFERS");
+                result = stmt.executeQuery("SELECT * FROM FREELANCEROFFERS Where JOBID="+job_id);
                 // process results
                 // while there are results
                 job job;
@@ -343,8 +349,8 @@ public ArrayList<job> getoffers(int job_id) {
                     job= new job();
                     job.setId(result.getInt("JobID"));
                     job.setFreelancerId(result.getInt("freelancerId"));
-                    
-
+                    freelancerList2=getFreelancer(job.getId());
+                    freelancerList.add(freelancerList2);
                     //Add values to list
                     JobsList.add(job);
                 }
@@ -364,7 +370,8 @@ public ArrayList<job> getoffers(int job_id) {
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
-        return JobsList;
+        
+        return freelancerList;
 }
 
 

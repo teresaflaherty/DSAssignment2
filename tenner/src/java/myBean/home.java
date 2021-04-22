@@ -180,8 +180,6 @@ public class home implements Serializable{
                     job.setJobstatus(result.getInt("Jobstatus"));
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
-                    
-
 
                     //Add values to list
                     JobsList.add(job);

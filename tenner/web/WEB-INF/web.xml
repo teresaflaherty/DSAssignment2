@@ -14,10 +14,14 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    <session-config>
-    <tracking-mode>COOKIE</tracking-mode>
+<session-config>
+	<cookie-config>
+	    <http-only>true</http-only>
+	    <secure>true</secure>
+	</cookie-config>
+	<tracking-mode>COOKIE</tracking-mode>
+</session-config>
 
-    </session-config>
     <welcome-file-list>
         <welcome-file>login.xhtml</welcome-file>
     </welcome-file-list>
