@@ -35,7 +35,7 @@ and open the template in the editor.
 
  <div class="gig_list_heading" ><h:outputText value="#{home.getSearchtitle(home.searchjobterm)}"></h:outputText></div>
         <h:form class="flex-grid-thirds all_gigs">
-        <ui:repeat var="r" value="#{home.getAllJobs()}">
+        <ui:repeat var="r" value="#{home.search()}">
    
                 <div class="col">
                 <div class="gig_card">

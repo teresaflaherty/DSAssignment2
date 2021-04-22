@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Gig Overview</title>
         <h:outputStylesheet library="css" name="stylesgig.css"/>
@@ -20,7 +21,9 @@
                 <h3>Expected Pay: €#{gig.payment}</h3> 
             </ui:repeat>
 
-            <h:commandLink class="apply_for_job" action="applicationcomplete">Apply for Job</h:commandLink><h:commandLink class="back_to_job_list" action="home">Back to job list</h:commandLink>
+            <h:commandLink class="apply_for_job" action="applicationcomplete">
+                <f:setPropertyActionListener target="#{home.searchjobterm}" value="#{null}"/>
+                Apply for Job</h:commandLink><h:commandLink class="back_to_job_list" action="home">Back to job list</h:commandLink>
         </h:form></div>
         <div class="col"><h:graphicImage class="animated" library="img" name="Coding.gif"/></div>
         </div>

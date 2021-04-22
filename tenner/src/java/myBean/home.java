@@ -56,7 +56,11 @@ public class home implements Serializable{
     public ArrayList<job> search() {
         
         ArrayList<job> JobsList = new ArrayList<>();
-        
+        if(searchjobterm==null){
+            JobsList=getAllJobs();
+            return JobsList;
+        }
+        else{
         // need two nested try-blocks, as code in finally may throw exception
         try {
             Connection connect;
@@ -143,6 +147,7 @@ public class home implements Serializable{
         }
         
         return JobsList;
+        }
     }
 
     
@@ -205,7 +210,7 @@ public class home implements Serializable{
     // Returns a list of all jobs
     public ArrayList<job> getAllJobs() {
         ArrayList<job> JobsList = new ArrayList<>();
-        
+
         try {
             Connection connect = null;
             Statement stmt = null;
