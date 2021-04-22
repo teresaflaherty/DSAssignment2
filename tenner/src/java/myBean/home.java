@@ -263,7 +263,7 @@ public class home implements Serializable{
     
     
     // Returns a list of all freelancers
-    public ArrayList<freelancer> getAllFreelancers(int id) {
+    public ArrayList<freelancer> getAllFreelancers() {
         ArrayList<freelancer> FreelancersList = new ArrayList<>();
         
         try {
@@ -443,5 +443,66 @@ public class home implements Serializable{
             System.out.println(sql.getSQLState());
         }
         return null;
+    }
+    
+    public int getRoleID(String type, String email) {
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                // connect to db - make sure derbyclient.jar is added to your project
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                // obtain statement from connection
+                stmt = connect.createStatement();
+                // execute statement - note DB needs to perform full processing
+                // on calling executeQuery
+                int userID = -1;
+                String query = "SELECT * FROM Users WHERE Email = ?";
+                PreparedStatement pst = connect.prepareStatement(query);
+                pst.setString(1, email);
+                result = pst.executeQuery();
+                if (result.next()) {
+                   userID = result.getInt("UserID");
+                }
+                switch(type) {
+                    case "Freelancer":
+                        result = stmt.executeQuery("SELECT * FROM Freelancers WHERE UserID = " + userID);
+                        if (result.next()) {
+                           return result.getInt("FreelancerID");
+                        }
+                        break;
+                    case "Provider":
+                        result = stmt.executeQuery("SELECT * FROM Providers WHERE UserID = " + userID);
+                        if (result.next()) {
+                           return result.getInt("ProviderID");
+                        }
+                        break;
+                    case "Administrator":
+                        result = stmt.executeQuery("SELECT * FROM Administrators WHERE UserID = " + userID);
+                        if (result.next()) {
+                           return result.getInt("AdministratorID");
+                        }
+                        break;
+                }
+                
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return 0;
     }
 }

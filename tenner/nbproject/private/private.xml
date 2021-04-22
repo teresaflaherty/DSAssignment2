@@ -3,16 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/web/jobwithdrawn.xhtml</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/web/jobdetails.xhtml</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/web/viewapplicant.xhtml</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/src/java/myBean/admin.java</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/web/gig.xhtml</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/web/register.xhtml</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/src/java/myBean/home.java</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/web/provideraccount.xhtml</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/src/java/myBean/provider.java</file>
-            <file>file:/C:/Users/my%20pc/OneDrive/4year/4year2semester/Digital_sys/Assignment_2/DSAssignment2/tenner/src/java/myBean/bean.java</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/provider.java</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/home.java</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/web/provideraccount.xhtml</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/job.java</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/bean.java</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/web/login.xhtml</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/admin.java</file>
         </group>
     </open-files>
 </project-private>

@@ -175,7 +175,7 @@
                             <p>Job Status: Open</p>
                         </div>
                         <div class="col2">
-                             <h:commandLink action="#{v.removeJob()}">Delete this Job</h:commandLink>
+                             <h:commandLink action="#{v.removeJob(true)}">Delete this Job</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
@@ -186,7 +186,7 @@
                             <p>Job Status: In Progress</p>
                         </div>
                         <div class="col2">
-                             <h:commandLink action="#{v.removeJob()}">Delete this Job</h:commandLink>
+                             <h:commandLink action="#{v.removeJob(true)}">Delete this Job</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
@@ -197,7 +197,7 @@
                             <p>Job Status: Closed</p>
                         </div>
                         <div class="col2">
-                             <h:commandLink action="#{v.removeJob()}">Delete this Job</h:commandLink>
+                             <h:commandLink action="#{v.removeJob(true)}">Delete this Job</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>

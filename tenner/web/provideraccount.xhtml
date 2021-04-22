@@ -41,7 +41,7 @@
                 <label for="jobdesc">Job Description:</label>
                 <h:inputTextarea id="jobdesc" value="#{job.description}"></h:inputTextarea>
 
-                <h:commandButton type="submit" action="#{provider.add_job(job.title, job.keywords, job.description, job.payment, job.jobstatus, bean.email)}" value="Post Job"></h:commandButton>
+                <h:commandButton type="submit" action="#{provider.addJob(job.title, job.keywords, job.description, job.payment, job.jobstatus, home.getRoleID('Provider', bean.email))}" value="Post Job"></h:commandButton>
 
             </h:form>
         </div>
@@ -60,8 +60,7 @@
                             <f:setPropertyActionListener target="#{job.id}" value="#{v.id}"/>
                             </h:commandLink>
                             <br></br>
-                             <h:commandLink action="jobwithdrawn">Withdraw Job
-                             <f:setPropertyActionListener target="#{job.id}" value="#{v.id}"/>
+                            <h:commandLink action="#{job.removeJob(false)}">Withdraw Job
                              </h:commandLink>
                         </div>
                     </div>

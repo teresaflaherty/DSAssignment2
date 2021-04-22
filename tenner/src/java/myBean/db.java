@@ -190,7 +190,7 @@ public class db {
     }
 
     
-    // Fills the tables with sample data (for demonstration purposes)
+    // Fills the tables with sample data if none exists (for demonstration purposes)
     public void createSampleData() {
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {

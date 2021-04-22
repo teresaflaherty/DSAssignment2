@@ -50,42 +50,26 @@ public class provider {
         this.userId = userId;
     }
     
-    
-    
 
-  public void add_job(String title,String keywords, String decript,int payment,int jobstatus,String provideremail){
-               // TODO add your handling code here:
-               int providerid= getUSERID(provideremail);
-               System.out.println("the providerid");
-               System.out.println(providerid);
+    public void addJob(String title, String keywords, String description, int payment, int jobstatus, int providerID){
         try {
             Connection connect = null;
-            Statement stmt = null;
-            ResultSet result;
-            String data = "Results:\n"; 
-                try {
-                // connect to db - make sure derbyclient.jar is added to your project
+            Statement stmt = null; 
+            try {
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
                 
-                 //Prepare a query to insert values into JOBDescriptions table
-                String query = "INSERT INTO JOBDescriptions (TITLE,KEYWORDS,DESCRIPTION,PAYMENTOFFER,JOBSTATUS,PROVIDERID)"
-                        +"VALUES(?,?,?,?,?,?,?)";
+                String query = "INSERT INTO JOBDescriptions (TITLE,KEYWORDS,DESCRIPTION,PAYMENTOFFER,JOBSTATUS,PROVIDERID) "
+                        +"VALUES(?,?,?,?,?,?)";
 
-                //Connect to the database with queries
                 PreparedStatement pst = connect.prepareStatement(query);
                 pst.setString(1, title);
                 pst.setString(2, keywords);
-                pst.setString(3, decript);
+                pst.setString(3, description);
                 pst.setInt(4, payment);
                 pst.setInt(5, jobstatus);
-                pst.setInt(6, providerid);
+                pst.setInt(6, providerID);
                 
-
-                
-                //execute the queries
                 pst.executeUpdate();
-                
-
                                        
             } finally {
                 if (stmt != null) {
@@ -95,9 +79,6 @@ public class provider {
                     connect.close();
                 }
             }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
         } catch (SQLException sql) {
             //sql.printStackTrace();
             System.out.println(sql.getMessage());
@@ -106,7 +87,7 @@ public class provider {
     
     }
 
-    public void accept_offer(int job_id){
+    public void acceptOffer(int job_id){
     
       try {
                 Connection connect = null;
@@ -207,7 +188,6 @@ public String getFreelancer(int freelancerid){
                ResultSet result;
                ResultSet result2;
                try {
-                   System.out.println("in try ");
                    // connect to db - make sure derbyclient.jar is added to your project
                    connect = DriverManager.getConnection(URL, USER, PASSWD);
 
@@ -311,96 +291,5 @@ public ArrayList<job> getoffers(int job_id) {
         }
         return JobsList;
 }
-
-
-
-    public int getUSERID(String email){
-
-    int userID = -1;
-    int personid=0;
-    try {
-               Connection connect = null;
-               Statement stmt = null;
-               Statement stmt2= null;
-               Statement stmt3= null;
-               ResultSet result;
-               ResultSet result2;
-               ResultSet result3;
-               try {
-                   // connect to db - make sure derbyclient.jar is added to your project
-                   connect = DriverManager.getConnection(URL, USER, PASSWD);
-
-                   // Retrieve UserID from type and ID
-                   String query = "SELECT * FROM Users WHERE Email = ?";
-
-                   //Connect to the database with queries
-                   PreparedStatement pst = connect.prepareStatement(query);
-
-                   //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst.setString(1, email);
-
-                   //execute the queries
-                   result = pst.executeQuery();
-
-
-                   while (result.next()) {
-                       userID = result.getInt(1);
-                   }
-
-                    String query2 = "SELECT * FROM providers WHERE USERID = ?";
-                                       //Connect to the database with queries
-                   PreparedStatement pst2 = connect.prepareStatement(query2);
-                                      //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst2.setInt(1, userID);
-                                      //execute the queries
-                   result2 = pst2.executeQuery();
-
-
-                   while (result2.next()) {
-                       personid = result2.getInt(1);
-                   }
-                   
-                   
-                   if(personid <100){
-
-                     String query3 = "SELECT * FROM Freelancers WHERE USERID = ?";
-                                          PreparedStatement pst3 = connect.prepareStatement(query3);
-                                      //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst3.setInt(1, userID);
-                                      //execute the queries
-                   result3 = pst3.executeQuery();
-
-
-                   while (result3.next()) {
-                       personid = result3.getInt(1);
-                   }
-                   }
-
-
-                   
-
-
-               } finally {
-                   if (stmt != null) {
-                       stmt.close();
-                   }
-                   if (connect != null) {
-                       connect.close();
-                   }
-               }
-
-           // deal with any potential exceptions
-           // note: all resources are closed automatically - no need for finally
-           } catch (SQLException sql) {
-               //sql.printStackTrace();
-               System.out.println(sql.getMessage());
-               System.out.println(sql.getSQLState());
-           }
-
-    return personid;
-  }
     
 }
