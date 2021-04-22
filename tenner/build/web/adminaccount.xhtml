@@ -15,8 +15,8 @@
             <h:graphicImage class="logo_icon" library="img" name="tenerr_w.png"/>
             <button class="tablinks" onclick="openTab(event, 'freelancer')" id="defaultOpen">Freelancers</button>
             <button class="tablinks" onclick="openTab(event, 'providers')">Providers</button>
-            <button class="tablinks" onclick="openTab(event, 'jobs')">Jobs</button>
             <button class="tablinks" onclick="openTab(event, 'admins')">Admins</button>
+            <button class="tablinks" onclick="openTab(event, 'jobs')">Jobs</button>
 
             <br></br>
             <br></br>
@@ -57,21 +57,21 @@
                             </h:selectManyCheckbox>
                         </div>
 
-                        <h:commandButton type="submit" action="#{admin.registerUser(bean.name, bean.password,bean.email, bean.type, bean.skills, bean.bio)}" value="Create Freelancer Account"></h:commandButton>
+                        <h:commandButton type="submit" action="#{admin.registerUser(true, bean.name, bean.password,bean.email, 'Freelancer', bean.skills, bean.bio)}" value="Create Freelancer Account"></h:commandButton>
 
                     </h:form>
                 </div>
                 <div class="halfcol">
                     <h1>All Freelancers</h1>
                     <h:form>
-                        <ui:repeat var="v" value="#{[1,2,3,4,5,6,7,8]}">
+                        <ui:repeat var="v" value="#{home.getAllFreelancers()}">
                             <div class="profilejob">
                                 <div class="col1">
-                                    <h3>Freelancer Name</h3>
-                                    <p>User ID: 123456</p>
+                                    <h3>#{home.getUserName(v.userId)}</h3>
+                                    <p>User ID: #{v.userId}</p>
                                 </div>
                                 <div class="col2">
-                                    <h:commandLink  action="adminaccount">Remove Freelancer</h:commandLink>
+                                    <h:commandLink  action="#{admin.removeUser('Freelancer', v.id)}">Remove Freelancer</h:commandLink>
                                 </div>
                             </div>
                         </ui:repeat>
@@ -99,21 +99,21 @@
                         <label for="password">Password:</label>
                         <h:inputSecret id="password" value="#{bean.password}"></h:inputSecret>
 
-                        <h:commandButton type="submit" action="#{admin.registerUser(bean.name, bean.password,bean.email, bean.type, bean.skills, bean.bio)}" value="Create Provider Account"></h:commandButton>
+                        <h:commandButton type="submit" action="#{admin.registerUser(true, bean.name, bean.password,bean.email, 'Provider', bean.skills, bean.bio)}" value="Create Provider Account"></h:commandButton>
 
                     </h:form>
                 </div>
                 <div class="halfcol">
                     <h1>All Providers</h1>
                     <h:form>
-                        <ui:repeat var="v" value="#{[1,2,3,4,5,6,7,8]}">
+                        <ui:repeat var="v" value="#{home.getAllProviders()}">
                             <div class="profilejob">
                                 <div class="col1">
-                                    <h3>Provider Name</h3>
-                                    <p>User ID: 123456</p>
+                                    <h3>#{home.getUserName(v.userId)}</h3>
+                                    <p>User ID: #{v.userId}</p>
                                 </div>
                                 <div class="col2">
-                                    <h:commandLink  action="adminaccount">Remove Provider</h:commandLink>
+                                    <h:commandLink  action="#{admin.removeUser('Provider', v.id)}">Remove Provider</h:commandLink>
                                 </div>
                             </div>
                         </ui:repeat>
@@ -140,21 +140,21 @@
                         <label for="password">Password:</label>
                         <h:inputSecret id="password" value="#{bean.password}"></h:inputSecret>
 
-                        <h:commandButton type="submit" action="#{admin.registerUser(bean.name, bean.password,bean.email, bean.type, bean.skills, bean.bio)}" value="Create Admin Account"></h:commandButton>
+                        <h:commandButton type="submit" action="#{admin.registerUser(true, bean.name, bean.password,bean.email, 'Administrator', bean.skills, bean.bio)}" value="Create Admin Account"></h:commandButton>
 
                     </h:form>
                 </div>
                 <div class="halfcol">
                     <h1>All Admins</h1>
                     <h:form>
-                        <ui:repeat var="v" value="#{[1,2,3,4,5,6,7,8]}">
+                        <ui:repeat var="v" value="#{home.getAllAdministrators()}">
                             <div class="profilejob">
                                 <div class="col1">
-                                    <h3>Admin Name</h3>
-                                    <p>User ID: 123456</p>
+                                    <h3>#{home.getUserName(v.userId)}</h3>
+                                    <p>User ID: #{v.userId}</p>
                                 </div>
                                 <div class="col2">
-                                    <h:commandLink  action="adminaccount">Remove Admin</h:commandLink>
+                                    <h:commandLink  action="#{admin.removeUser('Administrator', v.id)}">Remove Admin</h:commandLink>
                                 </div>
                             </div>
                         </ui:repeat>
@@ -166,20 +166,41 @@
             </div>
         </div>
          <div id="jobs" class="tabcontent">
-           <h1>My Jobs</h1>
+           <h1>All Jobs</h1>
             <h:form>
-                <ui:repeat var="v" value="#{[1,2,3,4,5,6,7,8]}">
+                <ui:repeat var="v" value="#{home.getAllJobs(0)}">
                     <div class="profilejob">
                         <div class="col1">
-                            <h3>Title of the Job</h3>
-                            <p>Status: Awaiting selection</p>
+                            <h3>#{v.title}</h3>
+                            <p>Job Status: Open</p>
                         </div>
                         <div class="col2">
-                             <h:commandLink action="jobwithdrawn">Delete this Job</h:commandLink>
+                             <h:commandLink action="#{v.removeJob()}">Delete this Job</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
-                
+                <ui:repeat var="v" value="#{home.getAllJobs(1)}">
+                    <div class="profilejob">
+                        <div class="col1">
+                            <h3>#{v.title}</h3>
+                            <p>Job Status: In Progress</p>
+                        </div>
+                        <div class="col2">
+                             <h:commandLink action="#{v.removeJob()}">Delete this Job</h:commandLink>
+                        </div>
+                    </div>
+                </ui:repeat>
+                <ui:repeat var="v" value="#{home.getAllJobs(2)}">
+                    <div class="profilejob">
+                        <div class="col1">
+                            <h3>#{v.title}</h3>
+                            <p>Job Status: Closed</p>
+                        </div>
+                        <div class="col2">
+                             <h:commandLink action="#{v.removeJob()}">Delete this Job</h:commandLink>
+                        </div>
+                    </div>
+                </ui:repeat>
               
             </h:form>
         </div>

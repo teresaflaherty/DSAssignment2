@@ -8,6 +8,12 @@ package myBean;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -17,6 +23,10 @@ import java.io.Serializable;
 @SessionScoped
 public class job implements Serializable {
 
+    private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
+    private static final String USER = "app";
+    private static final String PASSWD = "app";
+    
     private String title,keywords,description;
     private int id,payment,jobstatus,providerId,freelancerId;
    
@@ -103,4 +113,61 @@ public class job implements Serializable {
     public void setFreelancerId(int freelancerId) {
         this.freelancerId = freelancerId;
     } 
+    
+    
+    //This removes a job posting, the int JOBID can be changed for an String
+    // Just uncomment the int id on line 36-37
+        public void removeJob(){
+        
+        // TODO add your handling code here:
+                try {
+            Connection connect = null;
+            Statement stmt = null;
+            Statement stmt2 = null;
+            ResultSet result;
+            ResultSet result2;
+            String data = "Results:\n"; 
+                try {
+                // connect to db - make sure derbyclient.jar is added to your project
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                
+//                int id;
+//                id= Integer.parseInt(Jobid);
+                
+                 //Prepare a query to insert values into Athlete Coaches table
+                String query = "DELETE FROM FREELANCEROFFERS where JOBID="+id;
+                PreparedStatement pst = connect.prepareStatement(query);
+                //execute the queries
+                pst.executeUpdate();
+                
+                String query2 = "DELETE FROM JOBDescriptions where JOBID="+id;
+
+                //Connect to the database with queries
+                PreparedStatement pst2 = connect.prepareStatement(query2);
+                
+                //execute the queries
+                pst2.executeUpdate();
+                
+                                //Get text entered into textfields
+                //put them into the corresponding queries
+     
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+
+    
+    }
 }

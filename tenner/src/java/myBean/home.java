@@ -57,7 +57,7 @@ public class home implements Serializable{
         
         ArrayList<job> JobsList = new ArrayList<>();
         if(searchjobterm==null){
-            JobsList=getAllJobs();
+            JobsList=getAllJobs(0);
             return JobsList;
         }
         else{
@@ -180,6 +180,8 @@ public class home implements Serializable{
                     job.setJobstatus(result.getInt("Jobstatus"));
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
+                    
+
 
                     //Add values to list
                     JobsList.add(job);
@@ -206,7 +208,7 @@ public class home implements Serializable{
 
     
     // Returns a list of all jobs
-    public ArrayList<job> getAllJobs() {
+    public ArrayList<job> getAllJobs(int jobStatus) {
         ArrayList<job> JobsList = new ArrayList<>();
 
         try {
@@ -220,7 +222,7 @@ public class home implements Serializable{
                 stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM JobDescriptions");
+                result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ jobStatus);
                 // process results
                 // while there are results
                 job job;
@@ -374,14 +376,14 @@ public class home implements Serializable{
                 stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM Providers");
+                result = stmt.executeQuery("SELECT * FROM Administrators");
                 // process results
                 // while there are results
                 admin admin;
                 while (result.next()) {
                     
                     admin = new admin();
-                    admin.setId(result.getInt("ProviderID"));
+                    admin.setId(result.getInt("AdministratorID"));
                     admin.setUserId(result.getInt("UserID"));
 
                     //Add values to list
@@ -404,5 +406,42 @@ public class home implements Serializable{
             System.out.println(sql.getSQLState());
         }
         return AdministratorsList;
+    }
+    
+    public String getUserName(int userID) {
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                // connect to db - make sure derbyclient.jar is added to your project
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                // obtain statement from connection
+                stmt = connect.createStatement();
+                // execute statement - note DB needs to perform full processing
+                // on calling executeQuery
+                result = stmt.executeQuery("SELECT * FROM Users WHERE UserID = " + userID);
+                
+                if (result.next()) {
+                   return result.getString("Name");
+                }
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return null;
     }
 }

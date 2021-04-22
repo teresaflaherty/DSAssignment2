@@ -9,7 +9,6 @@ import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 @Named(value = "provider")
 @RequestScoped
@@ -52,61 +51,7 @@ public class provider {
     }
     
     
-    //This removes a job posting, the int JOBID can be changed for an String
-    // Just uncomment the int id on line 36-37
-        public void remove_job(int Jobid){
-        
-        // TODO add your handling code here:
-                try {
-            Connection connect = null;
-            Statement stmt = null;
-            Statement stmt2 = null;
-            ResultSet result;
-            ResultSet result2;
-            String data = "Results:\n"; 
-                try {
-                // connect to db - make sure derbyclient.jar is added to your project
-                connect = DriverManager.getConnection(URL, USER, PASSWD);
-                
-//                int id;
-//                id= Integer.parseInt(Jobid);
-                
-                 //Prepare a query to insert values into Athlete Coaches table
-                String query = "DELETE FROM FREELANCEROFFERS where JOBID="+Jobid;
-                PreparedStatement pst = connect.prepareStatement(query);
-                //execute the queries
-                pst.executeUpdate();
-                
-                String query2 = "DELETE FROM JOBDescriptions where JOBID="+Jobid;
-
-                //Connect to the database with queries
-                PreparedStatement pst2 = connect.prepareStatement(query2);
-                
-                //execute the queries
-                pst2.executeUpdate();
-                
-                                //Get text entered into textfields
-                //put them into the corresponding queries
-     
-            } finally {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (connect != null) {
-                    connect.close();
-                }
-            }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
-        } catch (SQLException sql) {
-            //sql.printStackTrace();
-            System.out.println(sql.getMessage());
-            System.out.println(sql.getSQLState());
-        }
-
     
-    }
 
   public void add_job(String title,String keywords, String decript,int payment,int jobstatus,String provideremail){
                // TODO add your handling code here:
@@ -123,7 +68,7 @@ public class provider {
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
                 
                  //Prepare a query to insert values into JOBDescriptions table
-                String query = "INSERT INTO JOBDescriptions (TITLE,KEYWORDS,DESCRIPTION,PAYMENTOFFER,JOBSTATUS,PROVIDERID,FREELANCERID)"
+                String query = "INSERT INTO JOBDescriptions (TITLE,KEYWORDS,DESCRIPTION,PAYMENTOFFER,JOBSTATUS,PROVIDERID)"
                         +"VALUES(?,?,?,?,?,?,?)";
 
                 //Connect to the database with queries
@@ -134,7 +79,6 @@ public class provider {
                 pst.setInt(4, payment);
                 pst.setInt(5, jobstatus);
                 pst.setInt(6, providerid);
-                pst.setInt(7, 1001);
                 
 
                 
@@ -251,8 +195,8 @@ public class provider {
   }
  
   
-public bean getFreelancer(int freelancerid){
-    bean freelancer = new bean();
+public String getFreelancer(int freelancerid){
+
     int userID = -1;
 
     String name=null;
@@ -268,7 +212,7 @@ public bean getFreelancer(int freelancerid){
                    connect = DriverManager.getConnection(URL, USER, PASSWD);
 
                    // Retrieve UserID from type and ID
-                   String query = "SELECT * FROM FREELANCERS WHERE freelancerid =?";
+                   String query = "SELECT USERID FROM FREELANCERS WHERE freelancerid =?";
 
                    //Connect to the database with queries
                    PreparedStatement pst = connect.prepareStatement(query);
@@ -280,14 +224,12 @@ public bean getFreelancer(int freelancerid){
                    //execute the queries
                    result = pst.executeQuery();
 
-                   
+
                    while (result.next()) {
                        userID = result.getInt(1);
-                       freelancer.setBio(result.getString(2));
-                       freelancer.setSkills((List<String>) result.getArray(3));
-                      
+
                    }
-                    System.out.println(freelancer.getBio());
+
                     String query2 = "SELECT * FROM users WHERE USERID = ?";
                                        //Connect to the database with queries
                    PreparedStatement pst2 = connect.prepareStatement(query2);
@@ -297,11 +239,9 @@ public bean getFreelancer(int freelancerid){
                                       //execute the queries
                    result2 = pst2.executeQuery();
 
-                   
+
                    while (result2.next()) {
-                       freelancer.setName(result2.getString(2));
-                       freelancer.setEmail(result2.getString(3));
-                       
+                       name = result2.getString(2);
                    }
 
                } finally {
@@ -320,13 +260,12 @@ public bean getFreelancer(int freelancerid){
                System.out.println(sql.getMessage());
                System.out.println(sql.getSQLState());
            }
-System.out.println(freelancer.getName());
-    return freelancer;
+
+    return name;
   }
 
-public ArrayList<bean> getoffers(int job_id) {
-     ArrayList<bean> freelancerList = new ArrayList<>();
-     bean freelancerList2 = null;
+public ArrayList<job> getoffers(int job_id) {
+       
      ArrayList<job> JobsList = new ArrayList<>();
         
         try {
@@ -340,7 +279,7 @@ public ArrayList<bean> getoffers(int job_id) {
                 stmt = connect.createStatement();
                 // execute statement - note DB needs to perform full processing
                 // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM FREELANCEROFFERS Where JOBID="+job_id);
+                result = stmt.executeQuery("SELECT * FROM FREELANCEROFFERS");
                 // process results
                 // while there are results
                 job job;
@@ -349,8 +288,8 @@ public ArrayList<bean> getoffers(int job_id) {
                     job= new job();
                     job.setId(result.getInt("JobID"));
                     job.setFreelancerId(result.getInt("freelancerId"));
-                    freelancerList2=getFreelancer(job.getId());
-                    freelancerList.add(freelancerList2);
+                    
+
                     //Add values to list
                     JobsList.add(job);
                 }
@@ -370,8 +309,7 @@ public ArrayList<bean> getoffers(int job_id) {
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
-        
-        return freelancerList;
+        return JobsList;
 }
 
 

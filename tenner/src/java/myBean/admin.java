@@ -54,7 +54,7 @@ public class admin {
     }
     
     
-    public String registerUser(String name, String password,String email, String type, ArrayList<String> skills, String bio){
+    public String registerUser(boolean admin, String name, String password,String email, String type, ArrayList<String> skills, String bio){
         
         try {
             try{
@@ -126,7 +126,10 @@ public class admin {
                             pst.setInt(1, userID);
                             //execute the queries
                             pst.executeUpdate();
-                            return "provideraccount";
+                            if(!admin) {
+                                return "provideraccount";
+                            }
+                            break;
                         case "Freelancer":
                             String skills_string = String.join(",", skills);
                             //Prepare a query to insert values into Users table
@@ -141,7 +144,10 @@ public class admin {
                             pst.setInt(4, userID);
                             //execute the queries
                             pst.executeUpdate();
-                            return "home";
+                            if(!admin) {
+                                return "home";
+                            }
+                            break;
                         case "Administrator":
                             //Prepare a query to insert values into Providers table
                             query = "INSERT INTO Administrators (UserID) VALUES(?)";
@@ -152,7 +158,7 @@ public class admin {
                             pst.setInt(1, userID);
                             //execute the queries
                             pst.executeUpdate();
-                            return "adminpage";
+                            break;
                         default:
                             return null;
                     }
@@ -173,8 +179,8 @@ public class admin {
             //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
-            return null;
         }
+        return null;
     }
     
     public String editProfile(String name, String email, String password, ArrayList<String> skills, String bio){
@@ -266,52 +272,92 @@ public class admin {
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
                 
-                // Retrieve UserID from type and ID
-                String query = "SELECT * FROM ?s WHERE ?ID = ?";
-
-                //Connect to the database with queries
-                PreparedStatement pst = connect.prepareStatement(query);
-
-                //Get text entered into textfields
-                //put them into the corresponding queries
-                pst.setString(1, type);
-                pst.setString(2, type);
-                pst.setInt(3, ID);
-
-                //execute the queries
-                result = pst.executeQuery();
-                
+                String query;
+                PreparedStatement pst;
                 int userID = -1;
-                while (result.next()) {
-                    userID = result.getInt(1);
+                switch(type) {
+                        case "Freelancer":
+                            query = "SELECT * FROM Freelancers WHERE FreelancerID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            result = pst.executeQuery();
+                            
+                            while (result.next()) {
+                                userID = result.getInt("UserID");
+                            }
+                            
+                            query = "DELETE FROM FreelancerOffers WHERE FreelancerID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            pst.executeUpdate();
+                            
+                            query = "DELETE FROM JobDescriptions WHERE FreelancerID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            pst.executeUpdate();
+                            
+                            query = "DELETE FROM Freelancers WHERE FreelancerID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            pst.executeUpdate();
+                            break;
+                        case "Provider":
+                            query = "SELECT * FROM Providers WHERE ProviderID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            result = pst.executeQuery();
+                            
+                            while (result.next()) {
+                                userID = result.getInt("UserID");
+                            }
+                            
+                            query = "SELECT * FROM JobDescriptions WHERE ProviderID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            result = pst.executeQuery();
+                            
+                            int jobID;
+                            while(result.next()) {
+                                jobID = result.getInt("JobID");
+                                query = "DELETE FROM FreelancerOffers WHERE JobID = ?";
+                                pst = connect.prepareStatement(query);
+                                pst.setInt(1, jobID);
+                                pst.executeUpdate();
+                            }
+                            
+                            query = "DELETE FROM JobDescriptions WHERE ProviderID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            pst.executeUpdate();
+                            
+                            query = "DELETE FROM Providers WHERE ProviderID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            pst.executeUpdate();
+                            break;
+                        case "Administrator":
+                            query = "SELECT * FROM Administrators WHERE AdministratorID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            result = pst.executeQuery();
+                            
+                            while (result.next()) {
+                                userID = result.getInt("UserID");
+                            }
+                            
+                            System.out.println("Got UserId: " + userID);
+                            query = "DELETE FROM Administrators WHERE AdministratorID = ?";
+                            pst = connect.prepareStatement(query);
+                            pst.setInt(1, ID);
+                            pst.executeUpdate();
+                            break;
                 }
                 
                 // Delete from type table
-                query = "DELETE FROM ?s WHERE ?ID = ?";
-
-                //Connect to the database with queries
-                pst = connect.prepareStatement(query);
-
-                //Get text entered into textfields
-                //put them into the corresponding queries
-                pst.setString(1, type);
-                pst.setString(2, type);
-                pst.setInt(3, ID);
-
-                //execute the queries
-                pst.executeUpdate();
-                
-                // Delete from type table
                 query = "DELETE FROM Users WHERE UserID = ?";
-
-                //Connect to the database with queries
                 pst = connect.prepareStatement(query);
-
-                //Get text entered into textfields
-                //put them into the corresponding queries
                 pst.setInt(1, userID);
 
                 //execute the queries
@@ -349,7 +395,7 @@ public class admin {
 
             Connection connect = null;
             Statement stmt = null;
-            ResultSet result;
+            ResultSet result, resultP, resultF;
             try {
                 // connect to db - make sure derbyclient.jar is added to your project
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -374,23 +420,24 @@ public class admin {
                 }
                 
                 query = "SELECT * FROM Providers WHERE UserID = ?";
-
-                //Connect to the database with queries
                 pst = connect.prepareStatement(query);
-
-                //Get text entered into textfields
-                //put them into the corresponding queries
                 pst.setInt(1, userID);
-
-                //execute the queries
-                result = pst.executeQuery();
+                resultP = pst.executeQuery();
+                
+                query = "SELECT * FROM freelancers WHERE UserID = ?";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, userID);
+                resultF = pst.executeQuery();
                 
                 String type;
-                if (result.next()) {
+                if (resultP.next()) {
                     type = "Provider";
                 }
-                else {
+                else if (resultF.next()){
                     type = "Freelancer";
+                }
+                else {
+                    type = "Administrator";
                 }
                 
                 // If password given matches the one on file
@@ -402,7 +449,7 @@ public class admin {
                         case "Provider":
                             return "provideraccount";
                         case "Administrator":
-                            return "adminpage";
+                            return "adminaccount";
                         default:
                             return null;
                     }
