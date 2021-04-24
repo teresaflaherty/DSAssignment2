@@ -13,15 +13,15 @@
      
         <div class="flex-grid-halfs">
         <div class="col"><h:form>
-             <ui:repeat var="gig" value="#{home.getJobDescription(job.id)}">
+             <ui:repeat var="j" value="#{home.getJobDescription(job.id)}">
                <h1>#{gig.title}</h1>
-                <p>Job ID: #{gig.id}</p>
-                <p>Keywords: #{gig.keywords}</p>
-                <p class="job_desc">Job description: #{gig.description} </p>
-                <h3>Expected Pay: €#{gig.payment}</h3> 
+                <p>Job ID: #{j.id}</p>
+                <p>Keywords: #{j.keywords}</p>
+                <p class="job_desc">Job description: #{j.description} </p>
+                <h3>Expected Pay: €#{j.payment}</h3> 
             </ui:repeat>
-
-            <h:commandLink class="apply_for_job" action="applicationcomplete">
+                <ui:param name="freelancerid" value="#{home.getRoleID('Freelancer', bean.email)}"/>
+            <h:commandLink class="apply_for_job" action="#{freelancer.apply(job.id, freelancerid)}">
                 <f:setPropertyActionListener target="#{home.searchjobterm}" value="#{null}"/>
                 Apply for Job</h:commandLink><h:commandLink class="back_to_job_list" action="home">Back to job list</h:commandLink>
         </h:form></div>

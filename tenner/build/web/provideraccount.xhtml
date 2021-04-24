@@ -23,7 +23,7 @@
             <h:form><h:commandLink id="logout" action="login">← Log out</h:commandLink></h:form>
 
         </div>
-
+        <ui:param name="providerid" value="#{home.getRoleID('Provider', bean.email)}"/>
         <div id="postjob" class="tabcontent">
             <h:form>
 
@@ -41,7 +41,7 @@
                 <label for="jobdesc">Job Description:</label>
                 <h:inputTextarea id="jobdesc" value="#{job.description}"></h:inputTextarea>
 
-                <h:commandButton type="submit" action="#{provider.addJob(job.title, job.keywords, job.description, job.payment, job.jobstatus, home.getRoleID('Provider', bean.email))}" value="Post Job"></h:commandButton>
+                <h:commandButton type="submit" action="#{provider.addJob(job.title, job.keywords, job.description, job.payment, job.jobstatus, providerid)}" value="Post Job"></h:commandButton>
 
             </h:form>
         </div>
@@ -49,7 +49,7 @@
         <div id="jobs" class="tabcontent">
            <h1>My Jobs</h1>
             <h:form>
-                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 0)}">
+                <ui:repeat var="v" value="#{home.getAssignedJobs('Provider', providerid, 0)}">
                     <div class="profilejob">
                         <div class="col1">
                             <h3>#{v.title}</h3>
@@ -60,25 +60,23 @@
                             <f:setPropertyActionListener target="#{job.id}" value="#{v.id}"/>
                             </h:commandLink>
                             <br></br>
-                            <h:commandLink action="#{job.removeJob(false)}">Withdraw Job
+                            <h:commandLink action="#{v.removeJob(false)}">Withdraw Job
                              </h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
-                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 1)}">
+                <ui:repeat var="v" value="#{home.getAssignedJobs('Provider', providerid, 1)}">
                     <div class="profilejob">
                         <div class="col1">
                             <h3>#{v.title}</h3>
                             <p>Status: Job in Progress</p>
                         </div>
                         <div class="col2">
-                            <h:commandLink  action="jobcomplete">Mark Job Complete
-                                <f:setPropertyActionListener target="#{job.id}" value="#{v.id}"/>
-                            </h:commandLink>
+                            <h:commandLink  action="#{provider.markDone(v.id)}">Mark Job Complete</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
-                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 2)}">
+                <ui:repeat var="v" value="#{home.getAssignedJobs('Provider', providerid, 2)}">
                     <div class="profilejob">
                         <div class="col1">
                             <h3>#{v.title}</h3>

@@ -149,7 +149,6 @@ public class home implements Serializable{
         return JobsList;
         }
     }
-
     
     // Returns a single Job Description
     public ArrayList<job> getJobDescription(int jobID) {
@@ -206,6 +205,58 @@ public class home implements Serializable{
         return JobsList;
     }
 
+    
+    // Returns a single Freelancer
+    public ArrayList<freelancer> getFreelancer(int freelancerID) {
+        ArrayList<freelancer> FreelancersList = new ArrayList<>();
+
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                // connect to db - make sure derbyclient.jar is added to your project
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                // obtain statement from connection
+                stmt = connect.createStatement();
+                // execute statement - note DB needs to perform full processing
+                // on calling executeQuery
+                result = stmt.executeQuery("SELECT * FROM Freelancers WHERE FreelancerID = " + freelancerID);
+
+                freelancer freelancer;
+                while (result.next()) {
+                    
+                    freelancer= new freelancer();
+                    freelancer.setId(result.getInt("FreelancerID"));
+                    freelancer.setUserId(result.getInt("UserID"));
+                    freelancer.setBalance(result.getInt("Balance"));
+                    freelancer.setBio(result.getString("Message"));
+                    freelancer.setSkills(result.getString("Skills"));
+                    
+                    //Add values to list
+                    FreelancersList.add(freelancer);
+                }
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return FreelancersList;
+    }
+
+    
     
     // Returns a list of all jobs
     public ArrayList<job> getAllJobs(int jobStatus) {
@@ -504,5 +555,61 @@ public class home implements Serializable{
             System.out.println(sql.getSQLState());
         }
         return 0;
+    }
+    
+    
+    public ArrayList<job> getAssignedJobs(String type, int roleID, int status) {
+        ArrayList<job> JobsList = new ArrayList<>();
+
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                stmt = connect.createStatement();
+                if(type.equals("Freelancer")) {
+                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ status +" AND FreelancerID = "+ roleID);
+                }
+                else {
+                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ status +" AND ProviderID = "+ roleID);
+                }
+                // process results
+                // while there are results
+                job job;
+                while (result.next()) {
+                    
+                    job= new job();
+                    job.setId(result.getInt("JobID"));
+                    job.setTitle(result.getString("title"));
+                    job.setKeywords(result.getString("keywords"));
+                    job.setDescription(result.getString("description"));
+                    job.setPayment(result.getInt("paymentoffer"));
+                    job.setJobstatus(result.getInt("Jobstatus"));
+                    job.setProviderId(result.getInt("providerId"));
+                    job.setFreelancerId(result.getInt("freelancerId"));
+                    
+
+                    //Add values to list
+                    JobsList.add(job);
+                }
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return JobsList;   
     }
 }

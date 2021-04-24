@@ -14,35 +14,31 @@
         <div class="flex-grid-halfs">
             <div class="col colsmall"><h:form>
                     
-                    <ui:repeat var="gig" value="#{home.getJobDescription(job.id)}">
-                       
-                        <h1>#{gig.title}</h1>
-                        <p>Status of Job:Open</p>
-                        <p>Keywords: #{gig.keywords}</p>
-                        <p class="job_desc">Job description: #{gig.description} </p>
-                        <h3>Expected Pay: #{gig.payment}</h3> 
-                        <h:commandLink class="apply_for_job" action="provideraccount">Go Back</h:commandLink>
-                        <h:commandLink class="back_to_job_list" action="jobwithdrawn">Delete this Job
-                            <f:setPropertyActionListener target="#{job.id}" value="#{gig.id}"/>
-                            </h:commandLink><!-- this will need to be hidden sometimes depending on status -->
-                    
+                <ui:repeat var="j" value="#{home.getJobDescription(job.id)}">
+                    <ui:param name="jobid" value="#{j.id}"/>
 
-</ui:repeat>
-                </h:form></div>
-            <div class="col colbig" >
+                    <h1>#{j.title}</h1>
+                    <p>Status of Job:Open</p>
+                    <p>Keywords: #{j.keywords}</p>
+                    <p class="job_desc">Job description: #{j.description} </p>
+                    <h3>Expected Pay: #{j.payment}</h3> 
+                    <h:commandLink class="apply_for_job" action="provideraccount">Go Back</h:commandLink>
+                    <h:commandLink class="back_to_job_list" action="#{job.removeJob(false)}">Withdraw Job</h:commandLink>
+
+                </ui:repeat>
+            </h:form></div>
+            <div class="col colbig">
                 <h3>List of Applicants</h3>
                 <h:form>
-                    <ui:repeat var="v" value="#{provider.getoffers(job.id)}">
+                    <ui:repeat var="v" value="#{job.getOffers()}">
                         
                     <div class="profilejob">
                         <div class="col1">
-                            
-                            <h3>#{provider.getFreelancer(v.freelancerId)}</h3>
-                        </div>
-                        <div class="col2">
-                            <h:commandLink action="viewapplicant">
-                                <f:setPropertyActionListener target="#{job.id}" value="#{gig.id}"/>
-                                view</h:commandLink>
+                            <h3>#{home.getUserName(v.userId)}</h3>
+                                 <p>List of Skills: #{v.skills}</p>
+                                 <p class="job_desc">Message to Providers: #{v.bio}</p>
+
+                                 <h:commandLink class="job_desc" action="#{provider.acceptOffer(job.id, v.id)}">Approve Applicant</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>

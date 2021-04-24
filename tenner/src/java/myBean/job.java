@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -119,26 +120,25 @@ public class job implements Serializable {
             Connection connect = null;
             Statement stmt = null;
             Statement stmt2 = null;
-            ResultSet result;
-            ResultSet result2;
-            String data = "Results:\n"; 
             try {
                 // connect to db - make sure derbyclient.jar is added to your project
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
 
                 //Prepare a query to insert values into Athlete Coaches table
-                String query = "DELETE FROM FREELANCEROFFERS where JOBID="+id;
+                String query = "DELETE FROM FreelancerOffers where JobID  = ?";
                 PreparedStatement pst = connect.prepareStatement(query);
+                pst.setInt(1, id);
                 //execute the queries
                 pst.executeUpdate();
 
-                String query2 = "DELETE FROM JOBDescriptions where JOBID="+id;
+                query = "DELETE FROM JobDescriptions where JobID = ?";
 
                 //Connect to the database with queries
-                PreparedStatement pst2 = connect.prepareStatement(query2);
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, id);
 
                 //execute the queries
-                pst2.executeUpdate();
+                pst.executeUpdate();
 
                 //Get text entered into textfields
                 //put them into the corresponding queries
@@ -164,5 +164,56 @@ public class job implements Serializable {
             return "jobwithdrawn";
         }
         return null;
+    }
+    
+    public ArrayList<freelancer> getOffers() {
+        ArrayList<freelancer> OffersList = new ArrayList<>();
+        ArrayList<Integer> FreelancerIDList = new ArrayList<>();
+        
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                stmt = connect.createStatement();
+                
+                result = stmt.executeQuery("SELECT * FROM FreelancerOffers WHERE JobID = " + id);
+                while (result.next()) {
+                    FreelancerIDList.add(result.getInt("FreelancerID"));
+                }
+                
+                for(int i = 0; i < FreelancerIDList.size(); i++) {
+                    result = stmt.executeQuery("SELECT * FROM Freelancers WHERE FreelancerID = " + FreelancerIDList.get(i));
+                    freelancer freelancer;
+                    while (result.next()) {
+                        freelancer= new freelancer();
+                        freelancer.setId(result.getInt("FreelancerID"));
+                        freelancer.setUserId(result.getInt("UserID"));
+                        freelancer.setBalance(result.getInt("Balance"));
+                        freelancer.setBio(result.getString("Message"));
+                        freelancer.setSkills(result.getString("Skills"));
+
+                        //Add values to list
+                        OffersList.add(freelancer);
+                    }
+                }
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return OffersList;
     }
 }

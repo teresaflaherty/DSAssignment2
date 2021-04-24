@@ -8,7 +8,6 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 @Named(value = "provider")
 @RequestScoped
@@ -58,7 +57,7 @@ public class provider {
             try {
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
                 
-                String query = "INSERT INTO JOBDescriptions (TITLE,KEYWORDS,DESCRIPTION,PAYMENTOFFER,JOBSTATUS,PROVIDERID) "
+                String query = "INSERT INTO JobDescriptions (Title,Keywords,Description,PaymentOffer,JobStatus,ProviderID) "
                         +"VALUES(?,?,?,?,?,?)";
 
                 PreparedStatement pst = connect.prepareStatement(query);
@@ -87,192 +86,32 @@ public class provider {
     
     }
 
-    public void acceptOffer(int job_id){
     
-      try {
-                Connection connect = null;
-                Statement stmt = null;
-                ResultSet result;
-                String data = "Results:\n"; 
-                    try {
-                    // connect to db - make sure derbyclient.jar is added to your project
-                    connect = DriverManager.getConnection(URL, USER, PASSWD);
-
-                     //Prepare a query to insert values into JOBDescriptions table
-                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=1 WHERE JOBID="+job_id;
-
-                    //Connect to the database with queries
-                    PreparedStatement pst = connect.prepareStatement(query);
-
-
-
-                    //execute the queries
-                    pst.executeUpdate();
-
-                                    //Get text entered into textfields
-                    //put them into the corresponding queries
-
-                } finally {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                    if (connect != null) {
-                        connect.close();
-                    }
-                }
-
-                // deal with any potential exceptions
-                // note: all resources are closed automatically - no need for finally
-            } catch (SQLException sql) {
-                //sql.printStackTrace();
-                System.out.println(sql.getMessage());
-                System.out.println(sql.getSQLState());
-            } 
-      
-  }
-
-  public void mark_done(int job_id){
-
-      try {
-                Connection connect = null;
-                Statement stmt = null;
-                ResultSet result;
-                String data = "Results:\n"; 
-                    try {
-                        System.out.println("Updating");
-                    // connect to db - make sure derbyclient.jar is added to your project
-                    connect = DriverManager.getConnection(URL, USER, PASSWD);
-
-                     //Prepare a query to insert values into JOBDescriptions table
-                    String query = "UPDATE JOBDescriptions SET JOBSTATUS=2 WHERE JOBID="+job_id;
-
-                    //Connect to the database with queries
-                    PreparedStatement pst = connect.prepareStatement(query);
-
-
-
-                    //execute the queries
-                    pst.executeUpdate();
-
-                                    //Get text entered into textfields
-                    //put them into the corresponding queries
-
-                } finally {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                    if (connect != null) {
-                        connect.close();
-                    }
-                }
-
-                // deal with any potential exceptions
-                // note: all resources are closed automatically - no need for finally
-            } catch (SQLException sql) {
-                //sql.printStackTrace();
-                System.out.println(sql.getMessage());
-                System.out.println(sql.getSQLState());
-            } 
-  }
- 
-  
-public String getFreelancer(int freelancerid){
-
-    int userID = -1;
-
-    String name=null;
-    try {
-               Connection connect = null;
-               Statement stmt = null;
-               Statement stmt2= null;
-               ResultSet result;
-               ResultSet result2;
-               try {
-                   // connect to db - make sure derbyclient.jar is added to your project
-                   connect = DriverManager.getConnection(URL, USER, PASSWD);
-
-                   // Retrieve UserID from type and ID
-                   String query = "SELECT USERID FROM FREELANCERS WHERE freelancerid =?";
-
-                   //Connect to the database with queries
-                   PreparedStatement pst = connect.prepareStatement(query);
-
-                   //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst.setInt(1, freelancerid);
-
-                   //execute the queries
-                   result = pst.executeQuery();
-
-
-                   while (result.next()) {
-                       userID = result.getInt(1);
-
-                   }
-
-                    String query2 = "SELECT * FROM users WHERE USERID = ?";
-                                       //Connect to the database with queries
-                   PreparedStatement pst2 = connect.prepareStatement(query2);
-                                      //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst2.setInt(1, userID);
-                                      //execute the queries
-                   result2 = pst2.executeQuery();
-
-
-                   while (result2.next()) {
-                       name = result2.getString(2);
-                   }
-
-               } finally {
-                   if (stmt != null) {
-                       stmt.close();
-                   }
-                   if (connect != null) {
-                       connect.close();
-                   }
-               }
-
-           // deal with any potential exceptions
-           // note: all resources are closed automatically - no need for finally
-           } catch (SQLException sql) {
-               //sql.printStackTrace();
-               System.out.println(sql.getMessage());
-               System.out.println(sql.getSQLState());
-           }
-
-    return name;
-  }
-
-public ArrayList<job> getoffers(int job_id) {
-       
-     ArrayList<job> JobsList = new ArrayList<>();
-        
+    // Deletes all FreelancerOffers for specified job and assigns freelancer to the job
+    public String acceptOffer(int jobID, int freelancerID){
+        System.out.println("got here lol" + jobID + freelancerID);
         try {
             Connection connect = null;
             Statement stmt = null;
-            ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
-                stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM FREELANCEROFFERS");
-                // process results
-                // while there are results
-                job job;
-                while (result.next()) {
-                    
-                    job= new job();
-                    job.setId(result.getInt("JobID"));
-                    job.setFreelancerId(result.getInt("freelancerId"));
-                    
 
-                    //Add values to list
-                    JobsList.add(job);
-                }
+                // Delete all offers for this job from FreelancerOffers table
+                String query = "DELETE FROM FreelancerOffers where JobID  = ?";
+                PreparedStatement pst = connect.prepareStatement(query);
+                pst.setInt(1, jobID);
+                //execute the queries
+                pst.executeUpdate();
+
+                // Change the job status to 1 (in progress), assign the freelancer to the job
+                query = "UPDATE JobDescriptions SET JobStatus = 1, FreelancerID = ? WHERE JobID = ?";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, freelancerID);
+                pst.setInt(2, jobID);
+
+                //execute the queries
+                pst.executeUpdate();
+
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -281,15 +120,64 @@ public ArrayList<job> getoffers(int job_id) {
                     connect.close();
                 }
             }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
         } catch (SQLException sql) {
             //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
-        }
-        return JobsList;
-}
-    
+        } 
+        return "applicantapproved";
+    }
+
+    public String markDone(int jobID){
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                stmt = connect.createStatement();
+
+                // Prepare a query to insert values into JOBDescriptions table
+                String query = "UPDATE JobDescriptions SET JobStatus = 2 WHERE JobID = ?";
+                PreparedStatement pst = connect.prepareStatement(query);
+                pst.setInt(1, jobID);
+                pst.executeUpdate();
+                
+                result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobID = " + jobID);
+                int freelancerID = 0;
+                int newBalance = 0;
+                while (result.next()) {
+                    freelancerID = result.getInt("FreelancerID");
+                    newBalance = result.getInt("PaymentOffer");
+                }
+                
+                result = stmt.executeQuery("SELECT * FROM Freelancers WHERE FreelancerID = " + freelancerID);
+                while (result.next()) {
+                    newBalance += result.getInt("Balance");
+                }
+                
+                // Prepare a query to insert values into JOBDescriptions table
+                query = "UPDATE Freelancers SET Balance = ? WHERE FreelancerID = ?";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, newBalance);
+                pst.setInt(2, freelancerID);
+                pst.executeUpdate();
+                
+                return "jobcomplete";
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        } 
+        return null;
+    }
 }

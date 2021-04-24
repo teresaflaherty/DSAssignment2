@@ -131,7 +131,7 @@ public class admin {
                             }
                             break;
                         case "Freelancer":
-                            String skills_string = String.join(",", skills);
+                            String skills_string = String.join(", ", skills);
                             //Prepare a query to insert values into Users table
                             query = "INSERT INTO Freelancers (Skills, Message, Balance, UserID) VALUES(?, ?, ?, ?)";
                             //Connect to the database with queries

@@ -9,6 +9,7 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 @Named(value = "freelancer")
 @RequestScoped
@@ -82,169 +83,169 @@ public class freelancer {
         this.skills = skills;
     }
     
-        public int getFreeLancerBal(String email){
-            int id= getUSERID(email);
-            int balance=0;
+    public int getBalance(int freelancerID) {
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+
+            ResultSet result;
+
             try {
-               Connection connect = null;
-               Statement stmt = null;
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                
+                String query = "SELECT * FROM FREELANCERS WHERE FreelancerID = ?";
+                PreparedStatement pst = connect.prepareStatement(query);
+                pst.setInt(1, freelancerID);
 
-               ResultSet result;
+                result = pst.executeQuery();
 
-               try {
-                   // connect to db - make sure derbyclient.jar is added to your project
-                   connect = DriverManager.getConnection(URL, USER, PASSWD);
-
-                   // Retrieve UserID from type and ID
-                   String query = "SELECT * FROM FREELANCERS WHERE USERID= ?";
-
-                   //Connect to the database with queries
-                   PreparedStatement pst = connect.prepareStatement(query);
-
-                   //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst.setInt(1, id);
-
-                   //execute the queries
-                   result = pst.executeQuery();
-
-
-                   while (result.next()) {
-                       balance = result.getInt(1);
-                   }
-
-               } finally {
-                   if (stmt != null) {
-                       stmt.close();
-                   }
-                   if (connect != null) {
-                       connect.close();
-                   }
-               }
-
-           // deal with any potential exceptions
-           // note: all resources are closed automatically - no need for finally
-           } catch (SQLException sql) {
-               //sql.printStackTrace();
-               System.out.println(sql.getMessage());
-               System.out.println(sql.getSQLState());
-           }
-        return balance;
-    }
-    public void apply(int job_id, String email){
-
-    int freelancerid=getUSERID(email);
-      try {
-                Connection connect = null;
-                Statement stmt = null;
-                ResultSet result;
-                String data = "Results:\n"; 
-                    try {
-                    // connect to db - make sure derbyclient.jar is added to your project
-                    connect = DriverManager.getConnection(URL, USER, PASSWD);
-
-                     //Prepare a query to insert values into JOBDescriptions table
-                    
-                  String query = "INSERT INTO FREELANCEROFFERS(JOBID,FREELANCERID)"+
-                          " VALUES(?,?)";
-
-                   //Connect to the database with queries
-                   PreparedStatement pst = connect.prepareStatement(query);
-
-
-                   //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst.setInt(1, job_id);
-                   pst.setInt(2, freelancerid);
-                    //execute the queries
-                    pst.executeUpdate();
-
-                                    //Get text entered into textfields
-                    //put them into the corresponding queries
-
-                } finally {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                    if (connect != null) {
-                        connect.close();
-                    }
+                while (result.next()) {
+                    return result.getInt("Balance");
                 }
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+        // deal with any potential exceptions
+        // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return 0;
+    }
+        
+    public String apply(int jobID, int freelancerID){
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            try {
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+
+                String query = "INSERT INTO FreelancerOffers(JobID, FreelancerID) VALUES(?, ?)";
+                PreparedStatement pst = connect.prepareStatement(query);
+                pst.setInt(1, jobID);
+                pst.setInt(2, freelancerID);
+                pst.executeUpdate();
+                
+                return "applicationcomplete";
+
+                                 //Get text entered into textfields
+                 //put them into the corresponding queries
+
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
 
                 // deal with any potential exceptions
                 // note: all resources are closed automatically - no need for finally
-            } catch (SQLException sql) {
-                //sql.printStackTrace();
-                System.out.println(sql.getMessage());
-                System.out.println(sql.getSQLState());
-            } 
-      
-  }
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return null;
+    }
     
-     public int getUSERID(String email){
-
-    int userID = -1;
-    int personid=0;
-    try {
-               Connection connect = null;
-               Statement stmt = null;
-               Statement stmt2= null;
-               ResultSet result;
-               ResultSet result2;
-               try {
-                   // connect to db - make sure derbyclient.jar is added to your project
-                   connect = DriverManager.getConnection(URL, USER, PASSWD);
-
-                   // Retrieve UserID from type and ID
-                   String query = "SELECT * FROM Users WHERE Email = ?";
-
-                   //Connect to the database with queries
-                   PreparedStatement pst = connect.prepareStatement(query);
-
-                   //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst.setString(1, email);
-
-                   //execute the queries
-                   result = pst.executeQuery();
-
-
-                   while (result.next()) {
-                       userID = result.getInt(1);
-                   }
-
-                    String query2 = "SELECT * FROM Freelancers WHERE USERID = ?";
-                                       //Connect to the database with queries
-                   PreparedStatement pst2 = connect.prepareStatement(query2);
-                                      //Get text entered into textfields
-                   //put them into the corresponding queries
-                   pst2.setInt(1, userID);
-                                      //execute the queries
-                   result2 = pst2.executeQuery();
-
-
-                   while (result2.next()) {
-                       personid = result2.getInt(1);
-                   }
-
-               } finally {
-                   if (stmt != null) {
-                       stmt.close();
-                   }
-                   if (connect != null) {
-                       connect.close();
-                   }
-               }
-
-           // deal with any potential exceptions
-           // note: all resources are closed automatically - no need for finally
-           } catch (SQLException sql) {
-               //sql.printStackTrace();
-               System.out.println(sql.getMessage());
-               System.out.println(sql.getSQLState());
-           }
-
-    return personid;
-  }
     
+    public void withdrawApplication(int freelancerID, int jobID) {
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            try {
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                System.out.println("JobID = "+jobID+"  FreelancerID = ");
+
+                //Prepare a query to insert values into Athlete Coaches table
+                String query = "DELETE FROM FreelancerOffers WHERE FreelancerID  = ? AND JobID = ?";
+                PreparedStatement pst = connect.prepareStatement(query);
+                pst.setInt(1, freelancerID);
+                pst.setInt(2, jobID);
+                //execute the queries
+                pst.executeUpdate();
+                
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+                // deal with any potential exceptions
+                // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+    }
+    
+    
+    public ArrayList<job> getOffers(int freelancerID) {
+        ArrayList<job> OffersList = new ArrayList<>();
+        ArrayList<Integer> JobIDList = new ArrayList<>();
+
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                stmt = connect.createStatement();
+                
+                result = stmt.executeQuery("SELECT * FROM FreelancerOffers WHERE FreelancerID = " + freelancerID);
+                while (result.next()) {
+                    JobIDList.add(result.getInt("JobID"));
+                }
+                
+                for(int i = 0; i < JobIDList.size(); i++) {
+                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobID = " + JobIDList.get(i));
+                    job job;
+                    while (result.next()) {
+                        job= new job();
+                        job.setId(result.getInt("JobID"));
+                        job.setTitle(result.getString("title"));
+                        job.setKeywords(result.getString("keywords"));
+                        job.setDescription(result.getString("description"));
+                        job.setPayment(result.getInt("paymentoffer"));
+                        job.setJobstatus(result.getInt("Jobstatus"));
+                        job.setProviderId(result.getInt("providerId"));
+                        job.setFreelancerId(result.getInt("freelancerId"));
+
+                        //Add values to list
+                        OffersList.add(job);
+                    }
+                }
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sql) {
+            //sql.printStackTrace();
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        return OffersList;
+    }
 }

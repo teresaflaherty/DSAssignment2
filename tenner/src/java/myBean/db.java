@@ -231,7 +231,7 @@ public class db {
                 // Add sample Freelancers (Users Jim Halpert and Pam Beasly)
                 query = "INSERT INTO Freelancers (Skills, Message, Balance, UserID) VALUES(?, ?, ?, ?)";
                 pst = connect.prepareStatement(query);
-                pst.setString(1, "skill_nodejs,skill_php,skill_javascript");
+                pst.setString(1, "Node.JS, PHP, JavaScript");
                 pst.setString(2, "Hello! I am a freelancer and I can do a great job for you.");
                 pst.setInt(3, 20);
                 pst.setInt(4, 1001);
@@ -240,7 +240,7 @@ public class db {
 
                 query = "INSERT INTO Freelancers (Skills, Message, Balance, UserID) VALUES(?, ?, ?, ?)";
                 pst = connect.prepareStatement(query);
-                pst.setString(1, "skill_nodejs,skill_javascript");
+                pst.setString(1, "Node.JS, JavaScript");
                 pst.setString(2, "Hello! I am experienced and can help you out.");
                 pst.setInt(3, 80);
                 pst.setInt(4, 1002);

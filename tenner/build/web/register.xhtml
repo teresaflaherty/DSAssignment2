@@ -9,7 +9,7 @@
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputScript library="js" name="index.js" target="head" />
     </h:head>
-    <body>
+    <h:body>
         <ul:register nameLabel="Name"
                      nameValue="#{bean.name}"
                      emailLabel="Email"
@@ -26,6 +26,6 @@
                      buttonAction="#{admin.registerUser(false, bean.name, bean.password,bean.email, bean.type, bean.skills, bean.bio)}">
         </ul:register>
         
-    </body>
+    </h:body>
 </html>
 

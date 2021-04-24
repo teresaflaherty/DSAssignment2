@@ -5,11 +5,10 @@
         <group>
             <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/provider.java</file>
             <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/home.java</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/web/viewapplicant.xhtml</file>
             <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/web/provideraccount.xhtml</file>
             <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/job.java</file>
-            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/bean.java</file>
-            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/web/login.xhtml</file>
-            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/src/java/myBean/admin.java</file>
+            <file>file:/Users/teresaflaherty/NetBeansProjects/tenner/web/jobdetails.xhtml</file>
         </group>
     </open-files>
 </project-private>

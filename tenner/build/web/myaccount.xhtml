@@ -20,7 +20,7 @@
             <br></br>
             <br></br>
             <p><b>Current Balance:</b></p>
-            <p>#{freelancer.getFreeLancerBal(Bean.email)}</p>
+            <p>#{freelancer.getBalance(home.getRoleID('Freelancer', bean.email))}</p>
             <h:form><h:commandLink id="gohome" action="home">← Home</h:commandLink>
                 <br></br>
                 <h:commandLink id="logout" action="login">← Log out</h:commandLink></h:form>
@@ -28,6 +28,7 @@
 
         <div id="profile" class="tabcontent">
             <h:form>
+                <ui:param name="freelancerid" value="#{home.getRoleID('Freelancer', bean.email)}"/>
 
                 <h1> Edit Your Profile </h1>
 
@@ -77,32 +78,29 @@
             <h1>My Jobs</h1>
             <h:form>
                 <h2>All Jobs</h2>
-                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 3)}">
+                <ui:repeat var="v" value="#{freelancer.getOffers(freelancerid)}">
                     <div class="profilejob">
                         <div class="col1">
                             <h3>#{v.title}</h3>
-                            <p>Description: #{v.description}</p>
+                            <p>Status: Open, Application Complete</p>
                         </div>
                         <div class="col2">
-                            <h:commandLink>Withdraw Application</h:commandLink>
+                            <h:commandLink action="#{freelancer.withdrawApplication(freelancerid, v.id)}">Withdraw Application</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>
-                
-                <br/>
-                <br/>
-                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 1)}">
+                <ui:repeat var="v" value="#{home.getAssignedJobs('Freelancer', freelancerid, 1)}">
                     <div class="profilejob">
                         <div class="col1">
                             <h3>#{v.title}</h3>
-                            <p>Status: Job accepted by Freelancer</p>
+                            <p>Status: In Progress</p>
                         </div>
                         <div class="col2">
                         </div>
                     </div>
                 </ui:repeat>
               
-                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 2)}">
+                <ui:repeat var="v" value="#{home.getAssignedJobs('Freelancer', freelancerid, 2)}">
                     <div class="profilejob">
                         <div class="col1">
                             <h3>#{v.title}</h3>
@@ -110,17 +108,6 @@
                         </div>
                         <div class="col2">
                             
-                        </div>
-                    </div>
-                </ui:repeat>
-                
-                <ui:repeat var="v" value="#{myaccount.getJob(bean.email, 0)}">
-                    <div class="profilejob">
-                        <div class="col1">
-                            <h3>#{v.title}</h3>
-                            <p>Status:Open</p>
-                        </div>
-                        <div class="col2">
                         </div>
                     </div>
                 </ui:repeat>
