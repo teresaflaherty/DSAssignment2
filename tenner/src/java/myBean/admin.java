@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 @Named(value = "admin")
 @RequestScoped
-
 public class admin {
     
     private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";

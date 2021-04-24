@@ -1,6 +1,6 @@
 package myBean;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.ejb.Stateless;
 
 import java.sql.*;
 /*
@@ -11,7 +11,7 @@ import java.sql.*;
 
 
 @Named(value = "db")
-@RequestScoped
+@Stateless
 public class db {
 
 

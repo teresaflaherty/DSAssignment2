@@ -10,11 +10,11 @@ import javax.inject.Named;
 
 import java.sql.*;
 import java.util.ArrayList;
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.Stateless;
 
 
 @Named(value = "home")
-@SessionScoped
+@Stateless
 public class home implements Serializable{
 
     private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
