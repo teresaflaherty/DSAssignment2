@@ -20,7 +20,7 @@
             <br></br>
             <br></br>
             <p><b>Current Balance:</b></p>
-            <p>#{freelancer.getBalance(home.getRoleID('Freelancer', bean.email))}</p>
+            <p>#{freelancer.getCurrentBalance(home.getRoleID('Freelancer', bean.email))}</p>
             <h:form><h:commandLink id="gohome" action="home">← Home</h:commandLink>
                 <br></br>
                 <h:commandLink id="logout" action="login">← Log out</h:commandLink></h:form>
@@ -69,7 +69,7 @@
                 </fieldset>
 
 
-                <h:commandButton type="submit" value="Save Profile" action="#{admin.editProfile(bean.name, bean.email, bean.password, bean.skills, bean.bio)}"></h:commandButton>
+                <h:commandButton type="submit" value="Save Profile" action="#{admin.editProfile(freelancerid, bean.name, bean.email, bean.password, bean.skills, bean.bio)}"></h:commandButton>
 
             </h:form>
         </div>

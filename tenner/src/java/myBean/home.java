@@ -7,23 +7,34 @@ package myBean;
 
 import java.io.Serializable;
 import javax.inject.Named;
-
 import java.sql.*;
 import java.util.ArrayList;
 import javax.ejb.Stateless;
 
-
+/**
+ *
+ * @author Gabriel Denys (17223857), Teresa Flaherty (17017157), Eoghan O'Connor (16110625), Raymond McCreesh (15211428)
+ */
 @Named(value = "home")
 @Stateless
 public class home implements Serializable{
-
+    // Database Access Variables
     private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
     private static final String USER = "app";
     private static final String PASSWD = "app";
     
+    // Search Variables
     private String searchjobterm;
     private String searchtitle = "All Gigs";
 
+    //Getters
+    /**
+     * Get the value of the Search Title (Visible at the top of the home page)
+     * 
+     * @param in the current term being searched
+     *
+     * @return value of searchtitle
+     */
     public String getSearchtitle(String in) {
         if( in == null || in.isEmpty())
         {
@@ -31,127 +42,139 @@ public class home implements Serializable{
         }
         else
         {
-            searchtitle = "Search results for \""+ in +"\" "; 
+            searchtitle = "Search Results for \""+ in +"\" "; 
         }
        return searchtitle;
     }
-
-     
-    public void setSearchtitle(String searchtitle) {
-        this.searchtitle = searchtitle;
-    }
     
     
+    /**
+     * Get the value of the Term currently being searched
+     *
+     * @return value of searchjobterm
+     */
     public String getSearchjobterm() {
         return searchjobterm;
     }
 
     
+    // Setters
+    /**
+     * Set the value of the Search Title
+     *
+     * @param searchtitle the new title of the search page
+     */
+    public void setSearchtitle(String searchtitle) {
+        this.searchtitle = searchtitle;
+    }
+    
+    
+    /**
+     * Set the value of the Search Title
+     *
+     * @param searchjobterm the new term being searched
+     */
     public void setSearchjobterm(String searchjobterm) {
         this.searchjobterm = searchjobterm;
     }
 
     
-    // Returns all jobs with keywords or ID that was searched
+    /**
+     * Search all Open Jobs for a Job that has the searched JobID or has matching keywords
+     *
+     * @return All Jobs relevant to the search term
+     */
     public ArrayList<job> search() {
-        
+        // The list of Jobs the search returns
         ArrayList<job> JobsList = new ArrayList<>();
+        
+        // If the search is empty add all Open Jobs to the list
         if(searchjobterm==null){
             JobsList=getAllJobs(0);
-            return JobsList;
         }
         else{
-        // need two nested try-blocks, as code in finally may throw exception
-        try {
-            Connection connect;
-            Statement stmt = null;
-            ResultSet result;
-
-            // connect to db - make sure derbyclient.jar is added to your project
-            connect = DriverManager.getConnection(URL, USER, PASSWD);
             try {
+                Connection connect;
+                Statement stmt = null;
+                ResultSet result;
 
-                int id;
-                id = Integer.parseInt(searchjobterm);
-                System.out.println(id);
-
+                // Connect to the database
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
-               
-                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE jobid=" + id);
-                    
-            
-                
-                job job;
-                while (result.next()) {
-                    
-                    job= new job();
-                    job.setId(result.getInt("JobID"));
-                    job.setTitle(result.getString("title"));
-                    job.setKeywords(result.getString("keywords"));
-                    job.setDescription(result.getString("description"));
-                    job.setPayment(result.getInt("paymentoffer"));
-                    job.setJobstatus(result.getInt("Jobstatus"));
-                    job.setProviderId(result.getInt("providerId"));
-                    job.setFreelancerId(result.getInt("freelancerId"));
-                    
+                try {
+                    // See if search term matches a JobID first
+                    int id;
+                    id = Integer.parseInt(searchjobterm);
+                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobID=" + id);
 
-                    //Add values to list
-                    JobsList.add(job);
-                }
-            } catch (Exception e) {
-                String Keywords = searchjobterm;
-                System.out.println(Keywords);
+                    // If a Job is returned, add it to the JobsList
+                    job job;
+                    while (result.next()) {
 
-                stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
-               
-              
-                    result = stmt.executeQuery("SELECT * FROM JOBDescriptions WHERE keywords LIKE '%" + Keywords + "%'");
+                        job= new job();
+                        job.setId(result.getInt("JobID"));
+                        job.setTitle(result.getString("Title"));
+                        job.setKeywords(result.getString("Keywords"));
+                        job.setDescription(result.getString("Description"));
+                        job.setPayment(result.getInt("PaymentOffer"));
+                        job.setJobstatus(result.getInt("JobStatus"));
+                        job.setProviderId(result.getInt("ProviderID"));
+                        job.setFreelancerId(result.getInt("FreelancerID"));
+
+                        JobsList.add(job);
+                    }
+                // If the Search term does not match JobID, exception will be caught
+                // This means the keywords will only be searched if search is not a JobID
+                } catch (Exception e) {
+                    // Store the searchjobterm as a String of keywords
+                    String Keywords = searchjobterm;
                     
-               
-                
-                job job;
-                while (result.next()) {
-                    job= new job();
-                    job.setId(result.getInt("JobID"));
-                    job.setTitle(result.getString("title"));
-                    job.setKeywords(result.getString("keywords"));
-                    job.setDescription(result.getString("description"));
-                    job.setPayment(result.getInt("paymentoffer"));
-                    job.setJobstatus(result.getInt("Jobstatus"));
-                    job.setProviderId(result.getInt("providerId"));
-                    job.setFreelancerId(result.getInt("freelancerId"));
- 
-                    //Add values to list
-                    JobsList.add(job);
-                }
+                    // Execute a query to find any Job Descriptions with keywords found in the searchjobterm
+                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE Keywords LIKE '%" + Keywords + "%'");
+                    
+                    // Add any found jobs to the JobsList
+                    job job;
+                    while (result.next()) {
+                        job= new job();
+                        job.setId(result.getInt("JobID"));
+                        job.setTitle(result.getString("title"));
+                        job.setKeywords(result.getString("keywords"));
+                        job.setDescription(result.getString("description"));
+                        job.setPayment(result.getInt("paymentoffer"));
+                        job.setJobstatus(result.getInt("Jobstatus"));
+                        job.setProviderId(result.getInt("providerId"));
+                        job.setFreelancerId(result.getInt("freelancerId"));
 
-            } finally {
-                if (stmt != null) {
-                    stmt.close();
+                        //Add values to list
+                        JobsList.add(job);
+                    }
+                } finally {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                    if (connect != null) {
+                        connect.close();
+                    }
                 }
-                if (connect != null) {
-                    connect.close();
-                }
+            // Deal with any potential exceptions
+            } catch (SQLException sql) {
+                System.out.println(sql.getMessage());
+                System.out.println(sql.getSQLState());
             }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
-        } catch (SQLException sql) {
-            //sql.printStackTrace();
-            System.out.println(sql.getMessage());
-            System.out.println(sql.getSQLState());
         }
-        
+        // Return the Jobs found to match the searchjobterm
         return JobsList;
-        }
     }
     
-    // Returns a single Job Description
+    /**
+     * Return a single Job Description using its JobID in a list form to be used in a UI Repeat
+     * 
+     * @param jobID the ID of the Job being requested
+     *
+     * @return The Job Description matching the given ID
+     */
     public ArrayList<job> getJobDescription(int jobID) {
+        // The list the Job will be stored in
         ArrayList<job> JobsList = new ArrayList<>();
 
         try {
@@ -159,14 +182,14 @@ public class home implements Serializable{
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
+                // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
+
+                // Execute a query to get the Job matching the given JobID
                 result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobID = " + jobID);
 
+                // Add the Job from the results to the list
                 job job;
                 while (result.next()) {
                     
@@ -180,12 +203,8 @@ public class home implements Serializable{
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
                     
-
-
-                    //Add values to list
                     JobsList.add(job);
                 }
-
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -194,72 +213,27 @@ public class home implements Serializable{
                     connect.close();
                 }
             }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sql) {
-            //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
+        // Return the Job in list format
         return JobsList;
     }
-
-    
-    // Returns a single Freelancer
-    public ArrayList<freelancer> getFreelancer(int freelancerID) {
-        ArrayList<freelancer> FreelancersList = new ArrayList<>();
-
-        try {
-            Connection connect = null;
-            Statement stmt = null;
-            ResultSet result;
-            try {
-                // connect to db - make sure derbyclient.jar is added to your project
-                connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
-                stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM Freelancers WHERE FreelancerID = " + freelancerID);
-
-                freelancer freelancer;
-                while (result.next()) {
-                    
-                    freelancer= new freelancer();
-                    freelancer.setId(result.getInt("FreelancerID"));
-                    freelancer.setUserId(result.getInt("UserID"));
-                    freelancer.setBalance(result.getInt("Balance"));
-                    freelancer.setBio(result.getString("Message"));
-                    freelancer.setSkills(result.getString("Skills"));
-                    
-                    //Add values to list
-                    FreelancersList.add(freelancer);
-                }
-
-            } finally {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (connect != null) {
-                    connect.close();
-                }
-            }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
-        } catch (SQLException sql) {
-            //sql.printStackTrace();
-            System.out.println(sql.getMessage());
-            System.out.println(sql.getSQLState());
-        }
-        return FreelancersList;
-    }
-
     
     
-    // Returns a list of all jobs
-    public ArrayList<job> getAllJobs(int jobStatus) {
+    /**
+     * Return all Jobs assigned to a given Provider or Freelancer with a given Status
+     * 
+     * @param type the type of User whose assigned jobs is being requested
+     * @param roleID the ProviderID/FreelancerID of the User
+     * @param status the Status of Jobs to be returned
+     *
+     * @return All Job Descriptions assigned to the User with the given Status
+     */
+    public ArrayList<job> getAssignedJobs(String type, int roleID, int status) {
+        // The list of Jobs to be added to and returned
         ArrayList<job> JobsList = new ArrayList<>();
 
         try {
@@ -267,15 +241,19 @@ public class home implements Serializable{
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
+                // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
-                result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ jobStatus);
-                // process results
-                // while there are results
+                // Execute a query to get all Jobs matching the Status and roleID
+                // Query different depending on User Type
+                if(type.equals("Freelancer")) {
+                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ status +" AND FreelancerID = "+ roleID);
+                }
+                else {
+                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ status +" AND ProviderID = "+ roleID);
+                }
+                
+                // Add all jobs from the result to the JobsList
                 job job;
                 while (result.next()) {
                     
@@ -289,8 +267,63 @@ public class home implements Serializable{
                     job.setProviderId(result.getInt("providerId"));
                     job.setFreelancerId(result.getInt("freelancerId"));
                     
+                    JobsList.add(job);
+                }
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+        // Deal with any potential exceptions
+        } catch (SQLException sql) {
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        // Return the list of Jobs Assigned to the User with the correct Status
+        return JobsList;   
+    }
+    
+    
+    /**
+     * Get all Job Descriptions currently in the database for a certain Status
+     * 
+     * @param jobStatus the Status of the Jobs being requested
+     *
+     * @return All Jobs
+     */
+    public ArrayList<job> getAllJobs(int jobStatus) {
+        // The list of Jobs to be added to and returned
+        ArrayList<job> JobsList = new ArrayList<>();
 
-                    //Add values to list
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                // Connect to the database
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                stmt = connect.createStatement();
+                
+                // Execute a query to get all Jobs with the given Status
+                result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ jobStatus);
+                
+                // Add all returned Jobs to the JobsList
+                job job;
+                while (result.next()) {
+                    
+                    job= new job();
+                    job.setId(result.getInt("JobID"));
+                    job.setTitle(result.getString("title"));
+                    job.setKeywords(result.getString("keywords"));
+                    job.setDescription(result.getString("description"));
+                    job.setPayment(result.getInt("paymentoffer"));
+                    job.setJobstatus(result.getInt("Jobstatus"));
+                    job.setProviderId(result.getInt("providerId"));
+                    job.setFreelancerId(result.getInt("freelancerId"));
+                    
                     JobsList.add(job);
                 }
             } finally {
@@ -302,19 +335,23 @@ public class home implements Serializable{
                 }
             }
 
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sql) {
-            //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
+        // Return the list of all Jobs
         return JobsList;
     }
     
     
-    // Returns a list of all freelancers
+    /**
+     * Get all Freelancers currently in the database
+     *
+     * @return All Freelancers
+     */
     public ArrayList<freelancer> getAllFreelancers() {
+        // The list of Freelancers to be added to and returned
         ArrayList<freelancer> FreelancersList = new ArrayList<>();
         
         try {
@@ -322,15 +359,14 @@ public class home implements Serializable{
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
+                // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
+                
+                // Execute a query to get all Freelancers
                 result = stmt.executeQuery("SELECT * FROM Freelancers");
-                // process results
-                // while there are results
+                
+                // Add all returned Freelancers to the FreelancersList
                 freelancer freelancer;
                 while (result.next()) {
                     
@@ -341,7 +377,6 @@ public class home implements Serializable{
                     freelancer.setBio(result.getString("Message"));
                     freelancer.setSkills(result.getString("Skills"));
 
-                    //Add values to list
                     FreelancersList.add(freelancer);
                 }
             } finally {
@@ -353,19 +388,23 @@ public class home implements Serializable{
                 }
             }
 
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sql) {
-            //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
+        // Return the list of all Freelancers
         return FreelancersList;
     }
 
     
-    // Returns a list of all providers
+    /**
+     * Get all Providers currently in the database
+     *
+     * @return All Providers
+     */
     public ArrayList<provider> getAllProviders() {
+        // The list of Providers to be added to and returned
         ArrayList<provider> ProvidersList = new ArrayList<>();
         
         try {
@@ -373,23 +412,21 @@ public class home implements Serializable{
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
+                // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
+                
+                // Execute a query to get all Providers
                 result = stmt.executeQuery("SELECT * FROM Providers");
-                // process results
-                // while there are results
+                
+                // Add all returned Providers to the ProvidersList
                 provider provider;
                 while (result.next()) {
                     
                     provider= new provider();
                     provider.setId(result.getInt("ProviderID"));
                     provider.setUserId(result.getInt("UserID"));
-
-                    //Add values to list
+                    
                     ProvidersList.add(provider);
                 }
             } finally {
@@ -401,19 +438,24 @@ public class home implements Serializable{
                 }
             }
 
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sql) {
             //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
+        // Return the list of all Providers
         return ProvidersList;
     }
     
     
-    // Returns a list of all freelancers
+    /**
+     * Get all Administrators currently in the database
+     *
+     * @return All Administrators
+     */
     public ArrayList<admin> getAllAdministrators() {
+        // The list of Administrators to be added to and returned
         ArrayList<admin> AdministratorsList = new ArrayList<>();
         
         try {
@@ -421,23 +463,21 @@ public class home implements Serializable{
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
+                // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
+                
+                // Execute a query to get all Administrators
                 result = stmt.executeQuery("SELECT * FROM Administrators");
-                // process results
-                // while there are results
+                
+                // Add all returned Administrators to the AdministratorsList
                 admin admin;
                 while (result.next()) {
                     
                     admin = new admin();
                     admin.setId(result.getInt("AdministratorID"));
                     admin.setUserId(result.getInt("UserID"));
-
-                    //Add values to list
+                    
                     AdministratorsList.add(admin);
                 }
             } finally {
@@ -448,35 +488,39 @@ public class home implements Serializable{
                     connect.close();
                 }
             }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sql) {
-            //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
         return AdministratorsList;
     }
     
+    
+    /**
+     * Get the Name of any User from their UserID
+     * 
+     * @param userID the UserID of the User whose Name is being requested
+     *
+     * @return The Name of the User with the given UserID
+     */
     public String getUserName(int userID) {
         try {
             Connection connect = null;
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
+                // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
+                
+                // Execute a query to get the User matching that UserID
                 result = stmt.executeQuery("SELECT * FROM Users WHERE UserID = " + userID);
                 
+                // If a User is found, return their Name
                 if (result.next()) {
                    return result.getString("Name");
                 }
-
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -485,59 +529,71 @@ public class home implements Serializable{
                     connect.close();
                 }
             }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sql) {
-            //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
+        // Return null if anything goes wrong
         return null;
     }
     
+    /**
+     * Get the FreelancerID, ProviderID, or AdministratorID of a User from their Email
+     * 
+     * @param type the Type of the User (Freelancer or Provider)
+     * @param email the Email of the User
+     *
+     * @return The FreelancerID/ProviderID/AdministratorID of the User whose Email is given
+     */
     public int getRoleID(String type, String email) {
         try {
             Connection connect = null;
             Statement stmt = null;
             ResultSet result;
             try {
-                // connect to db - make sure derbyclient.jar is added to your project
+                // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
-                // obtain statement from connection
                 stmt = connect.createStatement();
-                // execute statement - note DB needs to perform full processing
-                // on calling executeQuery
-                int userID = -1;
+                
+                // Prepare and execute a query to get the User matching the given Email
                 String query = "SELECT * FROM Users WHERE Email = ?";
                 PreparedStatement pst = connect.prepareStatement(query);
                 pst.setString(1, email);
                 result = pst.executeQuery();
+                
+                // Retrieve the UserID from the results and store it to find their RoleID
+                int userID = -1;
                 if (result.next()) {
                    userID = result.getInt("UserID");
                 }
+                
+                // Execute the query to a different table depending on the User's Type
                 switch(type) {
                     case "Freelancer":
+                        // Get and return the User's FreelancerID
                         result = stmt.executeQuery("SELECT * FROM Freelancers WHERE UserID = " + userID);
                         if (result.next()) {
                            return result.getInt("FreelancerID");
                         }
                         break;
                     case "Provider":
+                        // Get and return the User's ProviderID
                         result = stmt.executeQuery("SELECT * FROM Providers WHERE UserID = " + userID);
                         if (result.next()) {
                            return result.getInt("ProviderID");
                         }
                         break;
                     case "Administrator":
+                        // Get and return the User's AdministratorID
                         result = stmt.executeQuery("SELECT * FROM Administrators WHERE UserID = " + userID);
                         if (result.next()) {
                            return result.getInt("AdministratorID");
                         }
                         break;
+                    default:
+                        break;
                 }
-                
-
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -546,70 +602,12 @@ public class home implements Serializable{
                     connect.close();
                 }
             }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sql) {
-            //sql.printStackTrace();
             System.out.println(sql.getMessage());
             System.out.println(sql.getSQLState());
         }
+        // Return ID of 0 if something goes wrong
         return 0;
-    }
-    
-    
-    public ArrayList<job> getAssignedJobs(String type, int roleID, int status) {
-        ArrayList<job> JobsList = new ArrayList<>();
-
-        try {
-            Connection connect = null;
-            Statement stmt = null;
-            ResultSet result;
-            try {
-                connect = DriverManager.getConnection(URL, USER, PASSWD);
-                stmt = connect.createStatement();
-                if(type.equals("Freelancer")) {
-                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ status +" AND FreelancerID = "+ roleID);
-                }
-                else {
-                    result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE JobStatus = "+ status +" AND ProviderID = "+ roleID);
-                }
-                // process results
-                // while there are results
-                job job;
-                while (result.next()) {
-                    
-                    job= new job();
-                    job.setId(result.getInt("JobID"));
-                    job.setTitle(result.getString("title"));
-                    job.setKeywords(result.getString("keywords"));
-                    job.setDescription(result.getString("description"));
-                    job.setPayment(result.getInt("paymentoffer"));
-                    job.setJobstatus(result.getInt("Jobstatus"));
-                    job.setProviderId(result.getInt("providerId"));
-                    job.setFreelancerId(result.getInt("freelancerId"));
-                    
-
-                    //Add values to list
-                    JobsList.add(job);
-                }
-
-            } finally {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (connect != null) {
-                    connect.close();
-                }
-            }
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
-        } catch (SQLException sql) {
-            //sql.printStackTrace();
-            System.out.println(sql.getMessage());
-            System.out.println(sql.getSQLState());
-        }
-        return JobsList;   
     }
 }

@@ -1,20 +1,22 @@
-package myBean;
-import javax.inject.Named;
-import javax.ejb.Stateless;
-
-import java.sql.*;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package myBean;
 
+import javax.inject.Named;
+import javax.ejb.Stateless;
+import java.sql.*;
 
+/**
+ *
+ * @author Gabriel Denys (17223857), Teresa Flaherty (17017157), Eoghan O'Connor (16110625), Raymond McCreesh (15211428)
+ */
 @Named(value = "db")
 @Stateless
 public class db {
-
-
+    // Database access variables
     private static final String URL = "jdbc:derby://localhost:1527/tenner;create=true";
     private static final String USER = "app";
     private static final String PASSWD = "app";
@@ -28,17 +30,12 @@ public class db {
         String sql = "CREATE TABLE Users(UserID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
                 + "Name VARCHAR(60), Email VARCHAR(100), Password CHAR(64))";
-        // use try with resource
+        // Execute Statement
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
-                Statement stmt = connect.createStatement();) 
-        {
-
-            // execute statement 
+                Statement stmt = connect.createStatement();) {
             stmt.executeUpdate(sql);
-
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+            
+        // Deal with any potential exceptions
         } catch (SQLException sqle) {
               System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState());
@@ -54,17 +51,12 @@ public class db {
         String sql = "CREATE TABLE Providers(ProviderID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
                 + "UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
-        // use try with resource
+        // Execute Statement
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
-
-            // execute statement 
             stmt.executeUpdate(sql);
-
             
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState());
@@ -81,15 +73,12 @@ public class db {
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
                 + "Skills VARCHAR(500), Message VARCHAR(500), Balance INTEGER, "
                 + "UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
-        // use try with resource
+        // Execute Statement
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
-
-            // execute statement 
             stmt.executeUpdate(sql);
 
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+        // Deal with any potential exceptions
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState());
@@ -105,15 +94,12 @@ public class db {
         String sql = "CREATE TABLE Administrators(AdministratorID INTEGER PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
                 + "UserID INTEGER, FOREIGN KEY(UserID) REFERENCES Users(UserID))";
-        // use try with resource
+        // Execute Statement
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
-
-            // execute statement 
             stmt.executeUpdate(sql);
-
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+            
+        // Deal with any potential exceptions
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState());
@@ -132,15 +118,12 @@ public class db {
                 + "PaymentOffer INTEGER, JobStatus INTEGER, ProviderID INTEGER, "
                 + "FreelancerID INTEGER, FOREIGN KEY(ProviderID) REFERENCES Providers(ProviderID), "
                 + "FOREIGN KEY(FreelancerID) REFERENCES Freelancers(FreelancerID))";
-        // use try with resource
+        // Execute Statement
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
-
-            // execute statement 
             stmt.executeUpdate(sql);
-
-                       // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+            
+        // Deal with any potential exceptions
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState());
@@ -157,15 +140,12 @@ public class db {
                 + "PRIMARY KEY(JobID, FreelancerID), "
                 + "FOREIGN KEY(JobID) REFERENCES JobDescriptions(JobID), "
                 + "FOREIGN KEY(FreelancerID) REFERENCES Freelancers(FreelancerID))";
-        // use try with resource
+        // Execute Statement
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
-
-            // execute statement 
             stmt.executeUpdate(sql);
-
-                      // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
+            
+        // Deal with any potential exceptions
         } catch (SQLException sqle) {
            System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState());
@@ -173,11 +153,13 @@ public class db {
     }
     
     
-    // Adds all tables to the database
+    /**
+     * Calls above methods to add all tables to the database
+     */
     public void run() {
         db app = new db();
 
-        // add all tables to the database
+        // Add all tables to the database
         app.addTableUsers();
         app.addTableProviders();
         app.addTableFreelancers();
@@ -185,12 +167,15 @@ public class db {
         app.addTableJobDescriptions();
         app.addTableFreelancerOffers();
         
+        // Fill the database with sample data
         createSampleData();
 
     }
 
     
-    // Fills the tables with sample data if none exists (for demonstration purposes)
+    /**
+     * Fills the tables with sample data if none exists (for demonstration purposes)
+     */
     public void createSampleData() {
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -198,6 +183,7 @@ public class db {
             ResultSet result = stmt.executeQuery("SELECT * FROM Providers");
         
             if(!result.next()) {
+                // Values for Users to be added
                 String[] names = {"Dwight Schrute", "Jim Halpert", "Pam Beasly", "Michael Scott"};
                 String[] emails = {"schrutefarms@aol.com", "jimmyhalps@hotmail.com", "pam123@yahoo.com", "bestboss@gmail.com"};
                 String password = "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5"; // Hashed version of "12345"
@@ -206,18 +192,12 @@ public class db {
                 PreparedStatement pst;
 
                 for(int i = 0; i < names.length; i++) {
-                    //Prepare a query to insert values into Users table
+                    //Prepare and execute a query to insert values into Users table
                     query = "INSERT INTO Users (Name,Email,Password) VALUES(?,?,?)";
-
-                    //Connect to the database with queries
                     pst = connect.prepareStatement(query);
-
-                    //Get text entered into textfields
-                    //put them into the corresponding queries
                     pst.setString(1, names[i]);
                     pst.setString(2, emails[i]);
                     pst.setString(3, password);
-                    //execute the queries
                     pst.executeUpdate();
                 }
 
@@ -235,7 +215,6 @@ public class db {
                 pst.setString(2, "Hello! I am a freelancer and I can do a great job for you.");
                 pst.setInt(3, 20);
                 pst.setInt(4, 1001);
-                //execute the queries
                 pst.executeUpdate();
 
                 query = "INSERT INTO Freelancers (Skills, Message, Balance, UserID) VALUES(?, ?, ?, ?)";
@@ -244,7 +223,6 @@ public class db {
                 pst.setString(2, "Hello! I am experienced and can help you out.");
                 pst.setInt(3, 80);
                 pst.setInt(4, 1002);
-                //execute the queries
                 pst.executeUpdate();
 
 
@@ -254,7 +232,7 @@ public class db {
                 pst.setInt(1, 1003);
                 pst.executeUpdate();
 
-
+                // Values for Jobs to be added
                 String[] jobTitles = {"Build My Farm's Website", "Need a Crop Logging System", "Schrute Farms Mobile App"};
                 String[] jobKeywords = {"python, website, build", "log, database, crops", "mobile, app, development"};
                 String[] jobDescriptions = {
@@ -267,10 +245,8 @@ public class db {
                 int providerID = 1000;
 
                 for(int i = 0; i < jobTitles.length; i++ ) {
-                     //Prepare a query to insert values into JOBDescriptions table
+                     //Prepare and execute a query to insert values into JOBDescriptions table
                     query = "INSERT INTO JobDescriptions (TITLE,KEYWORDS,DESCRIPTION,PAYMENTOFFER,JOBSTATUS,PROVIDERID) VALUES(?,?,?,?,?,?)";
-
-                    //Connect to the database with queries
                     pst = connect.prepareStatement(query);
                     pst.setString(1, jobTitles[i]);
                     pst.setString(2, jobKeywords[i]);
@@ -278,10 +254,6 @@ public class db {
                     pst.setInt(4, payments[i]);
                     pst.setInt(5, status);
                     pst.setInt(6, providerID);
-
-
-
-                    //execute the queries
                     pst.executeUpdate();
                 }
 
@@ -290,7 +262,6 @@ public class db {
                 pst = connect.prepareStatement(query);
                 pst.setInt(1, 1000);
                 pst.setInt(2, 1000);
-                //execute the queries
                 pst.executeUpdate();
 
                 // Add freelancer offer (Pam Beesly offers to build Website)
@@ -298,9 +269,9 @@ public class db {
                 pst = connect.prepareStatement(query);
                 pst.setInt(1, 1000);
                 pst.setInt(2, 1001);
-                //execute the queries
                 pst.executeUpdate();
             }
+        // Deal with any potential exceptions
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState());
