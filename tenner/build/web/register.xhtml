@@ -7,6 +7,8 @@
     <h:head>
         <title>Tenerr</title>
         <h:outputStylesheet library="css" name="styles.css"/>
+         <h:outputScript library="js" name="jquery.js" target="head" />
+        
         <h:outputScript library="js" name="index.js" target="head" />
     </h:head>
     <h:body>
@@ -16,7 +18,7 @@
                      emailValue="#{bean.email}"
                      passwordLabel="Password"
                      passwordValue="#{bean.password}"
-                     roleLabel="Are you a freelancer or employer?"
+                     roleLabel="Are you a freelancer or provider?"
                      roleValue="#{bean.type}"
                      bioLabel="Bio"
                      bioValue="#{bean.bio}"

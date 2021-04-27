@@ -40,13 +40,13 @@
           <h:inputSecret id="password" value="#{cc.attrs.passwordValue}" required="true" requiredMessage="You must enter a password"></h:inputSecret>
           <div class="fullwch">
           <label>#{cc.attrs.roleLabel}:</label>
-        <h:selectOneRadio value="#{cc.attrs.roleValue}" required="true" requiredMessage="Please pick freelancer or employer">
-   	<f:selectItem itemValue="Freelancer" itemLabel="Freelancer" />
+        <h:selectOneRadio value="#{cc.attrs.roleValue}" required="true" requiredMessage="Please pick freelancer or provider">
+   	<f:selectItem id="freelancerradio" itemValue="Freelancer" itemLabel="Freelancer" />
    	<f:selectItem itemValue="Provider" itemLabel="Provider" />
         </h:selectOneRadio>
           </div>
      
-        <fieldset>  
+        <fieldset id="freelancer-only">  
         
           <legend><span class="number">2</span> Your Profile</legend>
           

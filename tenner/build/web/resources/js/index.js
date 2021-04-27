@@ -8,6 +8,20 @@ $("#search").change( function () {
         $(".gig_list_heading").html("Search results for '"+ $("#search").val() +"' ");
       
    });
+   $( document ).ready(function() {
+        $('.fullwch > table > tbody > tr > td').click(function(){
+    if($('input[value="Freelancer"]').is(":checked"))
+    {
+        $("#freelancer-only").show();
+    }
+    else
+    {
+       $("#freelancer-only").hide() ;
+    }
+});
+   })
+  
+
    
    function openTab(evt, cityName) {
   var i, tabcontent, tablinks;
@@ -25,3 +39,4 @@ $("#search").change( function () {
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
+

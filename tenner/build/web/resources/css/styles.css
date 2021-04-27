@@ -146,3 +146,7 @@ label.light {
             text-align: center;
             margin-top: -20px;
         }
+        #freelancer-only
+        {
+            display: none;
+        }
