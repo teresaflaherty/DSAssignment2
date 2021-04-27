@@ -89,7 +89,7 @@ public class home implements Serializable{
         ArrayList<job> JobsList = new ArrayList<>();
         
         // If the search is empty add all Open Jobs to the list
-        if(searchjobterm==null){
+        if(searchjobterm == null || searchjobterm.isEmpty()){
             JobsList=getAllJobs(0);
         }
         else{

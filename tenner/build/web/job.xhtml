@@ -14,7 +14,7 @@
         <div class="flex-grid-halfs">
         <div class="col"><h:form>
              <ui:repeat var="j" value="#{home.getJobDescription(job.id)}">
-               <h1>#{gig.title}</h1>
+               <h1>#{j.title}</h1>
                 <p>Job ID: #{j.id}</p>
                 <p>Keywords: #{j.keywords}</p>
                 <p class="job_desc">Job description: #{j.description} </p>
