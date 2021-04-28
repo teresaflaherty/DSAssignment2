@@ -624,8 +624,9 @@ public class home implements Serializable{
         // All of the pages broken into which roles should have access to them
         // Note: login and register are not here because all users can access them
         // Also, Admin can only access adminaccount page so no list was made for them
-        String[] freelancerPages = {"applicationcomplette", "home", "job", "myaccount"};
+        String[] freelancerPages = {"applicationcomplete", "home", "job", "myaccount"};
         String[] providerPages = {"applicantapproved", "jobcomplete", "jobdetails", "jobwithdrawn", "provideraccount"};
+        String[] administratorPages = {"adminaccount"};
         
         try {
             Connection connect = null;
@@ -685,8 +686,15 @@ public class home implements Serializable{
                 result = stmt.executeQuery("SELECT * FROM Administrators WHERE UserID = " + userID);
                 // If they are
                 if (result.next()) {
-                    // They should only be trying to access the Admin Account page
-                    // So redirect them here every time
+                    // Loop through all Provider pages
+                    for(String s : administratorPages) {
+                        // Grant them access if in list of administratorPages
+                        if(s.equals(page)){
+                            return page;
+                        }
+                    }
+                    // If page can't be found in list it means they don't have access,
+                    // Redirect them to their Administrator Account page
                     return "adminaccount";
                 }
             } finally {

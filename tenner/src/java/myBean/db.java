@@ -180,7 +180,7 @@ public class db {
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
 
-            ResultSet result = stmt.executeQuery("SELECT * FROM Providers");
+            ResultSet result = stmt.executeQuery("SELECT * FROM Users");
         
             if(!result.next()) {
                 // Values for Users to be added
