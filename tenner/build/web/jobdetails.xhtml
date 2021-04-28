@@ -4,12 +4,15 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:metadata>
+        <f:viewAction action="#{home.checkAccess('jobdetails', bean.email)}" />
+    </f:metadata>
     <h:head>
         <title>Job Overview</title>
         <h:outputStylesheet library="css" name="stylesjobdetails.css"/>
         <h:outputScript library="js" name="jquery.js" target="head" />
     </h:head>
-    <h:body ><h:graphicImage id="logo_icon" library="img" name="logo.jpg"/>
+    <h:body onload="#{home.checkAccess('jobdetails', bean.email)}"><h:graphicImage id="logo_icon" library="img" name="logo.jpg"/>
 
         <div class="flex-grid-halfs">
             <div class="col colsmall"><h:form>

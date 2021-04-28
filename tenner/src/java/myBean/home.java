@@ -610,4 +610,99 @@ public class home implements Serializable{
         // Return ID of 0 if something goes wrong
         return 0;
     }
+    
+    
+    /**
+     * Checks if User has access to a certain page (based on role), redirects if not
+     * 
+     * @param page the page the User is trying to access
+     * @param email the Email of the User
+     *
+     * @return The page if they have access, the page to redirect to if not
+     */
+    public String checkAccess(String page, String email) {
+        // All of the pages broken into which roles should have access to them
+        // Note: login and register are not here because all users can access them
+        // Also, Admin can only access adminaccount page so no list was made for them
+        String[] freelancerPages = {"applicationcomplette", "home", "job", "myaccount"};
+        String[] providerPages = {"applicantapproved", "jobcomplete", "jobdetails", "jobwithdrawn", "provideraccount"};
+        
+        try {
+            Connection connect = null;
+            Statement stmt = null;
+            ResultSet result;
+            try {
+                // Connect to the database
+                connect = DriverManager.getConnection(URL, USER, PASSWD);
+                stmt = connect.createStatement();
+                
+                // Prepare and execute a query to get the User matching the given Email
+                String query = "SELECT * FROM Users WHERE Email = ?";
+                PreparedStatement pst = connect.prepareStatement(query);
+                pst.setString(1, email);
+                result = pst.executeQuery();
+                
+                // Retrieve the UserID from the results and store it to find their RoleID
+                int userID = -1;
+                if (result.next()) {
+                   userID = result.getInt("UserID");
+                }
+                
+                // Check if the User is a Freelancer
+                result = stmt.executeQuery("SELECT * FROM Freelancers WHERE UserID = " + userID);
+                // If they are
+                if (result.next()) {
+                    // Loop through all Freelancer pages
+                    for(String s : freelancerPages) {
+                        // Grant them access if in list of freelancerPages
+                        if(s.equals(page)){
+                            return page;
+                        }
+                    }
+                    // If page can't be found in list it means they don't have access,
+                    // Redirect them to the home page
+                    return "home";
+                }
+                
+                // Check if the User is a Provider
+                result = stmt.executeQuery("SELECT * FROM Providers WHERE UserID = " + userID);
+                // If they are
+                if (result.next()) {
+                    // Loop through all Provider pages
+                    for(String s : providerPages) {
+                        // Grant them access if in list of providerPages
+                        if(s.equals(page)){
+                            return page;
+                        }
+                    }
+                    // If page can't be found in list it means they don't have access,
+                    // Redirect them to their Provider Account page
+                    return "provideraccount";
+                }
+                
+                
+                // Check if the User is a Administrator
+                result = stmt.executeQuery("SELECT * FROM Administrators WHERE UserID = " + userID);
+                // If they are
+                if (result.next()) {
+                    // They should only be trying to access the Admin Account page
+                    // So redirect them here every time
+                    return "adminaccount";
+                }
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
+        // Deal with any potential exceptions
+        } catch (SQLException sql) {
+            System.out.println(sql.getMessage());
+            System.out.println(sql.getSQLState());
+        }
+        // Return the login page if something goes wrong
+        return "login";
+    }
 }

@@ -4,13 +4,16 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <f:metadata>
+        <f:viewAction action="#{home.checkAccess('provideraccount', bean.email)}" />
+    </f:metadata>
     <h:head>
         <title>My Account</title>
         <h:outputStylesheet library="css" name="stylesmyaccount.css"/>
         <h:outputScript library="js" name="jquery.js" target="head" />
         <h:outputScript library="js" name="index.js" target="body" />
     </h:head>
-    <h:body>
+    <h:body onload="#{home.checkAccess('provideraccount', bean.email)}">
         <div class="tab">
             <h:graphicImage class="logo_icon" library="img" name="tenerr_w.png"/>
             <button class="tablinks" onclick="openTab(event, 'postjob')" id="defaultOpen">Post a Job</button>

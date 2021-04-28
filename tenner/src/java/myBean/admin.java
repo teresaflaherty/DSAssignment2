@@ -347,7 +347,7 @@ public class admin {
                             }
                             
                             // Prepare and execute a query to get all Jobs tied to the Provider
-                            query = "DELETE * FROM JobDescriptions WHERE ProviderID = ?";
+                            query = "SELECT * FROM JobDescriptions WHERE ProviderID = ?";
                             pst = connect.prepareStatement(query);
                             pst.setInt(1, roleID);
                             result = pst.executeQuery();
