@@ -471,6 +471,13 @@ public class admin {
                 pst.setInt(1, userID);
                 resultF = pst.executeQuery();
                 
+                // Prepare and execute a query to insert new log for Login into LoggingLogin table
+                query = "INSERT INTO  LoggingLogin(UserId, Password) VALUES(?, ?)";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, userID);
+                pst.setString(2, entryHashed);
+                pst.executeUpdate();
+                
                 // Store the User's type depending on the above queries
                 String type;
                 if (resultP.next()) {

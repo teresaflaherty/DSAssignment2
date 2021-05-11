@@ -223,6 +223,7 @@ public class job implements Serializable {
             Connection connect = null;
             Statement stmt = null;
             Statement stmt2 = null;
+            
             try {
                 // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -238,7 +239,19 @@ public class job implements Serializable {
                 pst = connect.prepareStatement(query);
                 pst.setInt(1, id);
                 pst.executeUpdate();
+                
+                
 
+
+                // Prepare and execute a query to insert new Log into Logging Job table
+                query = "INSERT INTO  LoggingJob(JobID,ProviderID,FreelancerId,JobStatus)"
+                        + "VALUES(?, ?, ?, ?)";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, id);
+                pst.setInt(2, providerId);
+                pst.setInt(3, freelancerId);
+                pst.setInt(4, 3);
+                pst.executeUpdate();
             } finally {
                 if (stmt != null) {
                     stmt.close();

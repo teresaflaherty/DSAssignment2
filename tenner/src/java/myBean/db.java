@@ -152,7 +152,55 @@ public class db {
         }
     }
     
+    /**
+    * Adds log of logins to the database for monitoring purposes
+     */
+    public void addLoggingLogin() {
+
+        String sql = "CREATE TABLE LoggingLogin( LogId INTEGER PRIMARY KEY "
+                +"GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1),"
+                +"logTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+                +"UserId INTEGER,"
+                +"FOREIGN KEY(UserId) REFERENCES Users(UserID),"
+                +"Password CHAR(64))";
+        // Execute Statement
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            stmt.executeUpdate(sql);
+            
+        // Deal with any potential exceptions
+        } catch (SQLException sqle) {
+           System.out.println(sqle.getMessage());
+            System.out.println(sqle.getSQLState());
+        }
+    }
     
+        /**
+    * Adds log of logins to the database for monitoring purposes
+     */
+    public void addLoggingJob() {
+
+        String sql = "CREATE TABLE LoggingJob( LogId INTEGER PRIMARY KEY "
+                +"GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1),"
+                +"logTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+                +"JobId INTEGER,"
+                +"FOREIGN KEY(JobId) REFERENCES JobDescriptions(JobID),"
+                +"ProviderID INTEGER,"
+                +"FOREIGN KEY(ProviderID) REFERENCES Providers(ProviderID),"
+                +"FreelancerId INTEGER,"
+                +"FOREIGN KEY(FreelancerId) REFERENCES Freelancers(FreelancerId),"
+                +"JobStatus INTEGER)";
+        // Execute Statement
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            stmt.executeUpdate(sql);
+            
+        // Deal with any potential exceptions
+        } catch (SQLException sqle) {
+           System.out.println(sqle.getMessage());
+            System.out.println(sqle.getSQLState());
+        }
+    }
     /**
      * Calls above methods to add all tables to the database
      */
@@ -165,7 +213,9 @@ public class db {
         app.addTableFreelancers();
         app.addTableAdministrators();
         app.addTableJobDescriptions();
-        app.addTableFreelancerOffers();
+        app.addTableFreelancerOffers(); 
+        app.addLoggingLogin();
+        app.addLoggingJob();
         
         // Fill the database with sample data
         createSampleData();

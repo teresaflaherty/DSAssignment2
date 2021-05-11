@@ -90,7 +90,10 @@ public class provider {
         try {
             Connection connect = null;
             Statement stmt = null; 
+            ResultSet result;
             try {
+                
+
                 // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
                 
@@ -104,6 +107,25 @@ public class provider {
                 pst.setInt(4, payment);
                 pst.setInt(5, 0); // All new jobs should have Open status when created
                 pst.setInt(6, providerID);
+                pst.executeUpdate();
+                
+                // obtain statement from connection
+                stmt = connect.createStatement();
+                
+                // Retrieve the Job ID
+                result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE Title = '" + title+ "'");
+                int jobId = 0;
+                while (result.next()) {
+                    jobId = result.getInt("jobId");
+                }
+                
+                // Prepare and execute a query to insert new Log into Logging Job table
+                query = "INSERT INTO  LoggingJob(JobID,ProviderID,JobStatus)"
+                        + "VALUES(?, ?, ?)";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, jobId);
+                pst.setInt(2, providerID);
+                pst.setInt(3, 0);
                 pst.executeUpdate();
                                        
             } finally {
@@ -128,11 +150,12 @@ public class provider {
      *
      * @param jobID the ID of the Job the offer is being accepted for
      * @param freelancerID the ID of the Freelancer being accepted
+     * @param ProviderID the ID of the provider being accepted
      * 
      * @return the next page to navigate to (applicantapproved)
      */
-    public String acceptOffer(int jobID, int freelancerID){
-        System.out.println("got here lol" + jobID + freelancerID);
+    public String acceptOffer(int jobID, int freelancerID, int providerID){
+        
         try {
             Connection connect = null;
             Statement stmt = null;
@@ -152,6 +175,17 @@ public class provider {
                 pst = connect.prepareStatement(query);
                 pst.setInt(1, freelancerID);
                 pst.setInt(2, jobID);
+                pst.executeUpdate();
+                
+                
+                // Prepare and execute a query to insert new Log into Logging Job table
+                query = "INSERT INTO  LoggingJob(JobID,ProviderID,FreelancerID,JobStatus)"
+                        + "VALUES(?, ?, ?, ?)";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, jobID);
+                pst.setInt(2, providerID);
+                pst.setInt(3, freelancerID);
+                pst.setInt(4, 1);
                 pst.executeUpdate();
                 
                 // Navigate to the "applicantapproved" page
@@ -179,10 +213,11 @@ public class provider {
      * Mark an In Progress Job as Complete
      *
      * @param jobID the ID of the Job being marked done
+     * @param providerID the provider's I.D of the Job being marked done
      * 
      * @return the next page to be navigated to (jobcomplete if successful)
      */
-    public String markDone(int jobID){
+    public String markDone(int jobID,int providerID){
         try {
             Connection connect = null;
             Statement stmt = null;
@@ -213,6 +248,7 @@ public class provider {
                 while (result.next()) {
                     newBalance += result.getInt("Balance");
                 }
+
                 
                 // Prepare and execute a query to update the Freelancer's Balance with the new amount
                 query = "UPDATE Freelancers SET Balance = ? WHERE FreelancerID = ?";
@@ -221,8 +257,22 @@ public class provider {
                 pst.setInt(2, freelancerID);
                 pst.executeUpdate();
                 
+                
+                // Prepare and execute a query to insert new Log into Logging Job table
+                query = "INSERT INTO  LoggingJob(JobID,ProviderID,FreelancerID,JobStatus)"
+                        + "VALUES(?, ?, ?, ?)";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, jobID);
+                pst.setInt(2, providerID);
+                pst.setInt(3, freelancerID);
+                pst.setInt(4, 2);
+                pst.executeUpdate();
+                
                 // Redirect to the "jobcomplete" page
                 return "jobcomplete";
+                
+                
+                
 
             } finally {
                 if (stmt != null) {

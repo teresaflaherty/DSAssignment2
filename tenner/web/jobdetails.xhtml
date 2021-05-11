@@ -40,8 +40,8 @@
                             <h3>#{home.getUserName(v.userId)}</h3>
                                  <p>List of Skills: #{v.skills}</p>
                                  <p class="job_desc">Message to Providers: #{v.bio}</p>
-
-                                 <h:commandLink class="job_desc" action="#{provider.acceptOffer(job.id, v.id)}">Approve Applicant</h:commandLink>
+                                   <ui:param name="providerid" value="#{home.getRoleID('Provider', bean.email)}"/>
+                                 <h:commandLink class="job_desc" action="#{provider.acceptOffer(job.id, v.id, providerid)}">Approve Applicant</h:commandLink>
                         </div>
                     </div>
                 </ui:repeat>

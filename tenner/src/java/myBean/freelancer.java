@@ -200,6 +200,7 @@ public class freelancer {
         try {
             Connection connect = null;
             Statement stmt = null;
+            ResultSet result;
             try {
                 // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -209,6 +210,28 @@ public class freelancer {
                 PreparedStatement pst = connect.prepareStatement(query);
                 pst.setInt(1, jobID);
                 pst.setInt(2, freelancerID);
+                pst.executeUpdate();
+                
+                // obtain statement from connection
+                stmt = connect.createStatement();
+                
+                // Retrieve the Job ID
+                result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE jobID ="+ jobID);
+                int jobId = 0;
+                int ProviderID=0;
+                while (result.next()) {
+                    jobId = result.getInt("jobId");
+                    ProviderID = result.getInt("ProviderID");
+                }
+                
+                // Prepare and execute a query to insert new Log into Logging Job table
+                query = "INSERT INTO  LoggingJob(JobID, ProviderID, freelancerID, JobStatus)"
+                        + "VALUES(?, ?, ?, ?)";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, jobId);
+                pst.setInt(2, ProviderID);
+                pst.setInt(3, freelancerID);
+                pst.setInt(4, 0);
                 pst.executeUpdate();
                 
                 // Navigate to the "applicationcomplete" page
@@ -242,6 +265,7 @@ public class freelancer {
         try {
             Connection connect = null;
             Statement stmt = null;
+            ResultSet result;
             try {
                 // Connect to the database
                 connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -251,6 +275,30 @@ public class freelancer {
                 PreparedStatement pst = connect.prepareStatement(query);
                 pst.setInt(1, freelancerID);
                 pst.setInt(2, jobID);
+                pst.executeUpdate();
+                
+                
+                
+                // obtain statement from connection
+                stmt = connect.createStatement();
+                
+                // Retrieve the Job ID
+                result = stmt.executeQuery("SELECT * FROM JobDescriptions WHERE jobID ="+ jobID);
+                int jobId = 0;
+                int ProviderID=0;
+                while (result.next()) {
+                    jobId = result.getInt("jobId");
+                    ProviderID = result.getInt("ProviderID");
+                }
+                
+                // Prepare and execute a query to insert new Log into Logging Job table
+                query = "INSERT INTO  LoggingJob(JobID, ProviderID, freelancerID, JobStatus)"
+                        + "VALUES(?, ?, ?, ?)";
+                pst = connect.prepareStatement(query);
+                pst.setInt(1, jobId);
+                pst.setInt(2, ProviderID);
+                pst.setInt(3, freelancerID);
+                pst.setInt(4, 0);
                 pst.executeUpdate();
                 
             } finally {
